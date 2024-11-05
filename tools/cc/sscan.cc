@@ -19,7 +19,8 @@
 //#pragma once
 
 
-#include "tuxvision/tools/sscan.h"
+#include <tuxic/tools/sscan.h>
+
 
 namespace tux
 {
@@ -84,14 +85,14 @@ sscan::location_data &sscan::sync()
     while (!eof(c) && (c < m_pos)) {
         switch (*c) {
             case '\n':
-                //book::debug() << " new line :";
+                //log::debug() << " new line :";
                 ++c;
                 if (*c == '\r') ++c;
                 ++m_location.line;
                 m_location.col = 1;
                 continue;
             case '\r':
-                //book::debug() << " new line :";
+                //log::debug() << " new line :";
                 ++c;
                 if (*c == '\n') ++c;
                 ++m_location.line;
@@ -99,8 +100,8 @@ sscan::location_data &sscan::sync()
                 continue;
             case '\t':
             case '\v' :
-                //throw book::exception()[book::error() << book::codeurn::rejected << " - invalid character, intentionally not handled in this context."];
-                book::error() << book::code::rejected << "unhandled character.";
+                //throw log::exception()[log::error() << log::codeurn::rejected << " - invalid character, intentionally not handled in this context."];
+                log::error() << log::code::rejected << "unhandled character.";
 
             default:
                 ++c;
@@ -109,7 +110,7 @@ sscan::location_data &sscan::sync()
     }
     m_location.offset = m_pos - m_begin;
     // ...
-    //book::debug() << mark();
+    //log::debug() << mark();
     return m_location;
 }
 
@@ -134,7 +135,7 @@ sscan &sscan::operator=(std::string_view view)
 
     if(view.empty())
     {
-        book::error() << "assigned with an empty string \"view\". be aware, this instance cannot be used.";
+        log::error() << "assigned with an empty string \"view\". be aware, this instance cannot be used.";
         return *this;
     }
     m_begin = m_pos = view.begin()+0;
@@ -163,9 +164,9 @@ bool sscan::operator++(int)
     return !eof();
 }
 
-book::code sscan::seek(int32_t Idx)
+log::code sscan::seek(int32_t Idx)
 {
-//    if(text.empty()) return book::code::Rejected;
+//    if(text.empty()) return log::code::Rejected;
 
 //    Signal Exception on any attempt to seek into an empty string_view !! :
     if(m_begin && m_end) {
@@ -178,7 +179,7 @@ book::code sscan::seek(int32_t Idx)
 
             m_pos = m_end - X;
             sync();
-            return book::code::accepted;
+            return log::code::accepted;
         }
         if (((m_begin + Idx) < m_end)) m_pos = m_begin + Idx;
         else
@@ -187,19 +188,19 @@ book::code sscan::seek(int32_t Idx)
         sync();
     }
     else
-        //Rem::Exception() [ Rem::Except() << book::code::empty << ": Attempt to use the seek_at method on an un-assigned/incompletely assigned sscan!" ];
-        book::error() << book::code::empty << ": attempt to use the seek_at method on an un-assigned/incompletely assigned sscan!";
+        //Rem::Exception() [ Rem::Except() << log::code::empty << ": Attempt to use the seek_at method on an un-assigned/incompletely assigned sscan!" ];
+        log::error() << log::code::empty << ": attempt to use the seek_at method on an un-assigned/incompletely assigned sscan!";
     
-    return eof() ? book::code::eof : book::code::accepted;
+    return eof() ? log::code::eof : log::code::accepted;
 }
 
 
 sscan::numeric::result sscan::scan_number()
 {
     numeric scanner(*this);
-    if (!scanner.base2() && !scanner.base8() && !scanner.base16() && !scanner.base10()) return { book::code::rejected, {} };
+    if (!scanner.base2() && !scanner.base8() && !scanner.base16() && !scanner.base10()) return { log::code::rejected, {} };
 
-    return { book::code::accepted, scanner.num_details };
+    return { log::code::accepted, scanner.num_details };
 }
 
 
@@ -207,13 +208,13 @@ sscan::numeric::result sscan::scan_number()
  * @brief scan literal string between quotes
  * @return string_view of the contents including the surrounding quotes.
  */
-std::pair<book::code, std::string_view> sscan::scan_literal_string()
+std::pair<log::code, std::string_view> sscan::scan_literal_string()
 {
     tux::string Buf;
     std::string_view::iterator A = m_pos;
 
 
-    if ((*A != '\'') && (*A != '"')) return { book::code::rejected,{} };
+    if ((*A != '\'') && (*A != '"')) return { log::code::rejected,{} };
     auto Q = *A++;
 
     // Ignore `""`  (empty string)
@@ -222,11 +223,11 @@ std::pair<book::code, std::string_view> sscan::scan_literal_string()
 
         if (*A == '\\')
         {
-            book::debug() << " a on '" << color::yellow << *A << color::reset << "':";
+            log::debug() << " a on '" << color::yellow << *A << color::reset << "':";
             Buf << *A++;
-            book::debug() << " a on '" << color::yellow << *A << color::reset << "':";
+            log::debug() << " a on '" << color::yellow << *A << color::reset << "':";
             Buf << *A++;
-            book::debug() << " a on '" << color::yellow << *A << color::reset << "':";
+            log::debug() << " a on '" << color::yellow << *A << color::reset << "':";
         }
         else
         {
@@ -238,9 +239,9 @@ std::pair<book::code, std::string_view> sscan::scan_literal_string()
     } while (!eof() && (*A != Q));
 
     if(eof())
-        return { book::code::rejected,{} };
+        return { log::code::rejected,{} };
 
-    return { book::code::accepted, {m_pos, ++A} };
+    return { log::code::accepted, {m_pos, ++A} };
 }
 
 
@@ -258,7 +259,7 @@ std::string sscan::mark()
     if(LEnd > m_end) LEnd = m_end;
     auto col = (m_pos-LBegin); // ?
     auto spc = std::string(col-1<=0? 0 : col,' ');
-    //Book::Debug() << ":---> nbspace: " << spc.length() << ":";
+    //log::Debug() << ":---> nbspace: " << spc.length() << ":";
     Str | '\n' | std::string(LBegin, LEnd+1) | '\n' | spc | glyph::c_arrow_up;
     return Str();
 }
@@ -298,11 +299,11 @@ bool sscan::pop()
     return true;
 }
 
-book::code sscan::reposition(std::size_t Offset)
+log::code sscan::reposition(std::size_t Offset)
 {
-    if(eof()) return book::code::rejected;
+    if(eof()) return log::code::rejected;
     m_pos += Offset;
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
 sscan::iterator sscan::start_sequence()
@@ -318,7 +319,7 @@ std::pair<sscan::iterator,sscan::iterator> sscan::end_sequence()
     return {I, m_pos};
 }
 
-std::pair<sscan::iterator, sscan::iterator> sscan::scan(const std::function<book::code()>& ScannerFn)
+std::pair<sscan::iterator, sscan::iterator> sscan::scan(const std::function<log::code()>& ScannerFn)
 {
     start_sequence();
     if(!!ScannerFn())
@@ -334,9 +335,9 @@ std::pair<sscan::iterator, sscan::iterator> sscan::scan(const std::function<book
  * @brief Scans for the first occurrence of \seq from the current position.
  * @param seq
  * @return Accepted if found, Rejected if not.
- * @todo Add more result codes to Book::Enum::Code !
+ * @todo Add more result codes to log::Enum::Code !
  */
-book::code sscan::seek_at(const std::string_view &seq, int32_t a_pos)
+log::code sscan::seek_at(const std::string_view &seq, int32_t a_pos)
 {
 
     sync();
@@ -345,32 +346,32 @@ book::code sscan::seek_at(const std::string_view &seq, int32_t a_pos)
     auto pos = sv.find(seq, Start);
 
     if(pos == std::string_view::npos)
-        return book::code::rejected;
+        return log::code::rejected;
     m_pos = m_begin+pos;
     sync();
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
-book::code sscan::step(int32_t Idx)
+log::code sscan::step(int32_t Idx)
 {
     m_pos += Idx;
     if(m_pos > m_end)
-        return book::code::eof;
-    return book::code::accepted;
+        return log::code::eof;
+    return log::code::accepted;
 }
 
-std::pair<book::code, std::string_view> sscan::scan_identifier()
+std::pair<log::code, std::string_view> sscan::scan_identifier()
 {
     auto cursor = m_pos;
     if(! std::isalpha(*cursor) && (*cursor != '_'))
-        return {book::code::rejected,{}};
+        return {log::code::rejected,{}};
 
     ++cursor;
     while(!eof() && (std::isalnum(*cursor) || (*cursor == '_'))) ++cursor;
     if(cursor > m_pos)
-        return {book::code::accepted, {m_pos, static_cast<uint32_t >(cursor-m_pos)}};
+        return {log::code::accepted, {m_pos, static_cast<uint32_t >(cursor-m_pos)}};
 
-    return {book::code::rejected,{}};
+    return {log::code::rejected,{}};
 
 }
 
@@ -385,12 +386,12 @@ sscan::location_data const& sscan::location_data::operator>>(std::string &Out) c
 
 sscan::numeric::numeric(sscan &Tx):text(Tx), m_end(Tx.m_end), m_pos(Tx.m_pos), m_begin(Tx.m_pos){}
 
-book::code sscan::numeric::operator()()
+log::code sscan::numeric::operator()()
 {
-    return book::code::ok;
+    return log::code::ok;
 }
 
-book::code sscan::numeric::base2()
+log::code sscan::numeric::base2()
 {
     // 0b11010101010101010101010101010101010                --> Parsed all
     // 0b1101'0101'01010101'''''''0101'0101'0101'0101'0100'1010  --> Parsed all
@@ -398,7 +399,7 @@ book::code sscan::numeric::base2()
     // 11010101'01010101'01010101'01010101'01001010B        --> Parsed : Rejected
     // 11010101 01010101 01010101 01010101 01001010         --> Parsed :  [base 10] 11'010'101
 
-    book::debug() << book::fn::func;
+    log::debug() << log::fn::func;
     auto a = text();
     tux::string buf;
     num_details.base = details::base_size::Binary;
@@ -414,31 +415,31 @@ book::code sscan::numeric::base2()
                 buf << *a++;
             else
             {
-                book::out() << " base 2 : rejected @prefix '" << color::yellow << *a << color::reset << "'.";
-                return book::code::rejected;
+                log::out() << " base 2 : rejected @prefix '" << color::yellow << *a << color::reset << "'.";
+                return log::code::rejected;
             }
         }
     }
     if(a == m_begin)
     {
-        book::out() << " base 2: rejected @prefix '" << color::yellow << *a << color::reset << "'.";
-        return book::code::rejected;
+        log::out() << " base 2: rejected @prefix '" << color::yellow << *a << color::reset << "'.";
+        return log::code::rejected;
     }
 
     loop2:
-    //book::debug() << "loop2: a on '" << color::yellow << *a << color::reset << '\'';
+    //log::debug() << "loop2: a on '" << color::yellow << *a << color::reset << '\'';
     if(*a == '\'')++a;
     if(!isdigit(*a))
     {
-        book::out() << " base 2: rejected @prefix '" << color::yellow << *a << color::reset << "'.";
-        return book::code::rejected;
+        log::out() << " base 2: rejected @prefix '" << color::yellow << *a << color::reset << "'.";
+        return log::code::rejected;
     }
     while(!text.eof() && std::isdigit(*a))
     {
         if(*a>='2')
         {
-            book::out() << " base 2: rejected @prefix '" << color::yellow << *a << color::reset << "'.";
-            return book::code::rejected;
+            log::out() << " base 2: rejected @prefix '" << color::yellow << *a << color::reset << "'.";
+            return log::code::rejected;
         }
         buf << *a++;
     }
@@ -448,18 +449,18 @@ book::code sscan::numeric::base2()
         goto loop2;
     }
 
-    if((a==m_begin) || (buf.empty())) return book::code::rejected;// duh!!!
-    //book::debug() << " base2 : " << color::yellow << buf << book::fn::endl << " length: " << color::lightcoral << seq.length();
+    if((a==m_begin) || (buf.empty())) return log::code::rejected;// duh!!!
+    //log::debug() << " base2 : " << color::yellow << buf << log::fn::endl << " length: " << color::lightcoral << seq.length();
     num_details.seq = {m_begin, a};
     num_details.value = std::stoi(buf(), nullptr, 2);
     num_details.base = details::base_size::Binary;
     num_details.scale_value();
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
-book::code sscan::numeric::base8()
+log::code sscan::numeric::base8()
 {
-    book::debug() << book::fn::func;
+    log::debug() << log::fn::func;
     auto a = text();
     tux::string buf;
     num_details.base = details::base_size::Octal;
@@ -470,8 +471,8 @@ book::code sscan::numeric::base8()
         a++;
     else
     {
-        book::out() << " base 8 :rejected @prefix '" << color::yellow << *a << color::reset << "'.";
-        return book::code::rejected;
+        log::out() << " base 8 :rejected @prefix '" << color::yellow << *a << color::reset << "'.";
+        return log::code::rejected;
     }
 
     loop8:
@@ -479,34 +480,34 @@ book::code sscan::numeric::base8()
     while(!text.eof() && std::isdigit(*a) && (*a <= '7'))
     {
         buf << *a++;
-        //book::debug() << " pushed digit'" <<  color::yellow << *(a-1) << color::reset << "' into the buffer. next:'" << color::yellow << *a << color::reset << "'";
+        //log::debug() << " pushed digit'" <<  color::yellow << *(a-1) << color::reset << "' into the buffer. next:'" << color::yellow << *a << color::reset << "'";
     }
     if(!text.eof() && (*a == '\''))
     {
         ++a;
         goto loop8;
     }
-    //book::debug() << "octal loop exit: a on '" << color::yellow << *a << color::reset << '\'';
+    //log::debug() << "octal loop exit: a on '" << color::yellow << *a << color::reset << '\'';
 
     if(((std::isdigit(*a) && (*a >= '7'))) || (a==m_begin))
     {
-        book::out() << " base 8 :rejected @prefix '" << color::yellow << *a << color::reset << "'.";
-        return book::code::rejected;
+        log::out() << " base 8 :rejected @prefix '" << color::yellow << *a << color::reset << "'.";
+        return log::code::rejected;
     }
     //--a;
-    //book::debug() << "base8: a on '" << color::yellow << *a << color::reset << "' - buffer: [" << color::yellow << buf << color::reset << "]";
-    if(buf.empty()) return book::code::rejected;
+    //log::debug() << "base8: a on '" << color::yellow << *a << color::reset << "' - buffer: [" << color::yellow << buf << color::reset << "]";
+    if(buf.empty()) return log::code::rejected;
     num_details.seq = {m_begin, a};
     num_details.value = std::stoi(buf(), nullptr, 8);
     num_details.base = details::base_size::Octal;
     num_details.scale_value();
-    return book::code::accepted;
+    return log::code::accepted;
 
 }
 
-book::code sscan::numeric::base10()
+log::code sscan::numeric::base10()
 {
-    book::debug() << " base 2,8,16 rejected then:";
+    log::debug() << " base 2,8,16 rejected then:";
     auto a = text(); // get the current iterrator value...
     num_details.base = details::base_size::Decimal;
 
@@ -518,40 +519,40 @@ book::code sscan::numeric::base10()
         buf << '.'; // force '.' for convertion using tux::string >> ;
         ++a;
     }
-    //book::debug() << "decimal : a on '" << color::yellow << *a << color::reset << '\'';
+    //log::debug() << "decimal : a on '" << color::yellow << *a << color::reset << '\'';
     if(*a == '\'') ++a;
-    //book::debug() << "decimal : a on '" << color::yellow << *a << color::reset << '\'';
+    //log::debug() << "decimal : a on '" << color::yellow << *a << color::reset << '\'';
     if(!std::isdigit(*a) ){
-        book::out() << " base 10 :rejected @prefix '" << color::yellow << *a << color::reset << "'.";
-        return book::code::rejected;
+        log::out() << " base 10 :rejected @prefix '" << color::yellow << *a << color::reset << "'.";
+        return log::code::rejected;
     }
-    //book::debug() << "a on '" << color::yellow << *a << color::reset << '\'';
+    //log::debug() << "a on '" << color::yellow << *a << color::reset << '\'';
 
     while(!text.eof() && std::isdigit(*a))
     {
-        //book::debug() << "while loop: a on '" << color::yellow << *a << color::reset << '\'';
+        //log::debug() << "while loop: a on '" << color::yellow << *a << color::reset << '\'';
         buf << *a++;
-        //book::debug() << "next to digit: a on '" << color::yellow << *a << color::reset << '\'';
+        //log::debug() << "next to digit: a on '" << color::yellow << *a << color::reset << '\'';
         if(*a == '\''){++a; continue; }
         if((*a == '.'))// || (*a == ','))
         {
             if(real)
             {
-                //book::status() << " rejected on '" << color::yellow << *a << color::reset << "' - real flag already set.";
-                return book::code::rejected;
+                //log::status() << " rejected on '" << color::yellow << *a << color::reset << "' - real flag already set.";
+                return log::code::rejected;
             }
             real = true;
             buf << '.';
             ++a;
             continue;
         }
-        //book::debug() << "bottom while loop: a on '" << color::yellow << *a << color::reset << '\'';
+        //log::debug() << "bottom while loop: a on '" << color::yellow << *a << color::reset << '\'';
     }
-    //book::debug() << "a on '" << color::yellow << *a << color::reset << '\'';
+    //log::debug() << "a on '" << color::yellow << *a << color::reset << '\'';
     if(a == m_begin)
     {
-        book::status() << " base 10: rejected on '" << color::yellow << *a << color::reset << "' sequence is not a number.";
-        return book::code::rejected;
+        log::status() << " base 10: rejected on '" << color::yellow << *a << color::reset << "' sequence is not a number.";
+        return log::code::rejected;
     }
 
     num_details.seq = {m_begin, a};
@@ -563,14 +564,14 @@ book::code sscan::numeric::base10()
     else
         num_details.size = details::size_type::F32;
 
-    //book::debug() << " base10 : " << color::yellow << buf << book::fn::endl << " length: " << color::lightcoral << seq.length();
+    //log::debug() << " base10 : " << color::yellow << buf << log::fn::endl << " length: " << color::lightcoral << seq.length();
 
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
-book::code sscan::numeric::base16()
+log::code sscan::numeric::base16()
 {
-    book::debug() << " base 2,8 rejected - then:";
+    log::debug() << " base 2,8 rejected - then:";
     auto a = text();
     tux::string buf;
     num_details.base = details::base_size::Hexadecimal;
@@ -581,21 +582,21 @@ book::code sscan::numeric::base16()
 
         if(std::toupper(*a) != 'x')
         {
-            book::out() << " base 16 :rejected @prefix '" << color::yellow << *a << color::reset << "'.";
-            return book::code::rejected;
+            log::out() << " base 16 :rejected @prefix '" << color::yellow << *a << color::reset << "'.";
+            return log::code::rejected;
         }
     }
     else
         if(*a !='$') // hard coded
-            return book::code::rejected;
+            return log::code::rejected;
     ++a;
-    book::out() << " hex prefix validated, now begin to scan : on char [" << color::yellow << *a << color::reset << "':";
+    log::out() << " hex prefix validated, now begin to scan : on char [" << color::yellow << *a << color::reset << "':";
     loop16:
-    //book::debug() << "loop16: a on '" << color::yellow << *a << color::reset << '\'';
+    //log::debug() << "loop16: a on '" << color::yellow << *a << color::reset << '\'';
     while(!text.eof() && std::isxdigit(*a)) buf << *a++;
     if(!text.eof() && (*a == '\'')){ ++a; goto loop16; }
-    if(a==m_begin) return book::code::rejected;
-    book::debug() << book::fn::func << "buffer contents '" << color::yellow << buf() << color::reset << '\'';
+    if(a==m_begin) return log::code::rejected;
+    log::debug() << log::fn::func << "buffer contents '" << color::yellow << buf() << color::reset << '\'';
     num_details.seq = {m_begin, a};
 //    Rem::Debug() << "[Hex] : Sequence ["
 //    << Color::Yellow << std::string(num_details.seq.begin(), num_details.seq.end())
@@ -604,10 +605,10 @@ book::code sscan::numeric::base16()
 //    << Color::White <<  " -> Buffer:["
 //    << Color::Yellow << Buf
 //    << Color::Reset << "] ";
-    if(buf.empty()) return book::code::rejected;
+    if(buf.empty()) return log::code::rejected;
     num_details.value = std::stoi(buf(), nullptr, 16);
     num_details.scale_value();
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
 void sscan::numeric::sign()

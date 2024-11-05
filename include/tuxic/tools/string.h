@@ -158,7 +158,7 @@ private:
 #pragma endregion tokenizer
 
 public:
-    static std::string make_str(const char *B, const char *E) { return (std::string(B, E)); }
+    static std::string make_str(const char *B, const char *E) { return {B, E}; }
     static std::string now(const std::string &str_fmt);
     bool empty() { return _d_.empty(); }
 

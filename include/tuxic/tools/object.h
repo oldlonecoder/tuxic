@@ -11,13 +11,13 @@
  ***************************************************************************/
 
 #pragma once
-#include "tuxvision/journal/book.h"
+#include <tuxic/tools/logger.h>
 
 
 namespace tux
 {
 
-class  _TUXVISION_ object
+class  TUXIC_TOOLS object
 {
     CLASSNAME_START(object)
 protected:
@@ -43,7 +43,7 @@ public:
     [[maybe_unused]] object::iterator get_child_iteratorby_id(const std::string& aid);
 
     //Book::Enums::Code detach();
-    book::code detach(object* obj_ptr=nullptr);
+    log::code detach(object* obj_ptr=nullptr);
     // -- All does the same, ...as a different name lol!
 
     template<typename T> [[maybe_unused]] T* as() { return dynamic_cast<T*>(this); }

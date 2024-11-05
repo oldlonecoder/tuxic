@@ -11,12 +11,7 @@
  ***************************************************************************/
 
 
-#include "tuxvision/tools/cmdargs.h"
-
-
-
-
-
+#include <tuxic/tools/cmdargs.h>
 
 namespace tux::cmd
 {
@@ -36,7 +31,7 @@ cmd_switch::iterator line::query(std::string_view SwitchData)
 line::~line()
 {
     arguments.clear(); // doh ...
-    book::info() << book::fn::func << "arguments switches infos are cleared.";
+    log::info() << log::fn::func << "arguments switches infos are cleared.";
 }
 
 
@@ -63,18 +58,18 @@ cmd_switch &line::operator<<(const cmd_switch &Arg)
     return *Sw;
 }
 
-book::code line::input(const std::vector<std::string_view>& StrArray)
+log::code line::input(const std::vector<std::string_view>& StrArray)
 {
     auto a = arguments.end();
 
     if(StrArray.empty())
-        return book::code::empty;
+        return log::code::empty;
 
     for(auto sv : StrArray)
     {
         auto next = query(sv);
 
-        book::debug() << color::cyan << "line::input" << color::white << '(' << color::yellow << sv << color::white << ") :";
+        log::debug() << color::cyan << "line::input" << color::white << '(' << color::yellow << sv << color::white << ") :";
 
         if(next == arguments.end())
         {
@@ -85,7 +80,7 @@ book::code line::input(const std::vector<std::string_view>& StrArray)
                 (*a)->arguments.emplace_back(sv);
                 ++(*a)->count;
                 (*a)->enabled = true;
-                book::debug() << color::yellow << (*a)->name << color::reset << " arg:" << (*a)->count << " '" << sv << '\'';
+                log::debug() << color::yellow << (*a)->name << color::reset << " arg:" << (*a)->count << " '" << sv << '\'';
             }
             else
             {
@@ -93,27 +88,27 @@ book::code line::input(const std::vector<std::string_view>& StrArray)
                 defaults.arguments.emplace_back(sv);
                 ++defaults.count;
                 defaults.enabled = true;
-                book::debug() << color::yellow << defaults.name << color::reset << " arg:" << defaults.count << " '" << sv << '\'';
+                log::debug() << color::yellow << defaults.name << color::reset << " arg:" << defaults.count << " '" << sv << '\'';
             }
         }
         else
         {
             if ((a != arguments.end()) && ((*a)->count < (*a)->required))
             {
-                book::error() << " argument " << color::yellow << (*a)->name << color::reset << " is missing " << color::red4 << (*a)->required - (*a)->count << color::reset << " arguments / " << color::lime << (*a)->required;
-                return book::code::failed;
+                log::error() << " argument " << color::yellow << (*a)->name << color::reset << " is missing " << color::red4 << (*a)->required - (*a)->count << color::reset << " arguments / " << color::lime << (*a)->required;
+                return log::code::failed;
             }
             a = next;
             (*a)->enabled = true;    
         }
     }
-    return book::code::ok;
+    return log::code::ok;
 }
 
 
-book::action  line::process()
+log::action  line::process()
 {
-    auto r = book::action::end;
+    auto r = log::action::end;
     if (!arguments.empty())
     {
         for (auto* arg : arguments)
@@ -123,20 +118,20 @@ book::action  line::process()
                 if (arg->required > arg->count)    
                 {
                     arg->enabled = false;
-                    throw book::except() << " cmd_switch '" << color::yellow << arg->name
+                    throw log::except() << " cmd_switch '" << color::yellow << arg->name
                         << color::reset << " is missing "
                         << color::red4 << arg->required - arg->count
                         << color::reset << " arguments: requires "
                         << color::lime << arg->required;
                     
                     // throw did not work? :
-                    book::except() << " if this is shown, it means exceptions are deactivated. i suggest to enable it... ";
-                    book::out() << usage();
-                    return book::action::leave;
+                    log::except() << " if this is shown, it means exceptions are deactivated. i suggest to enable it... ";
+                    log::out() << usage();
+                    return log::action::leave;
 
                 }
-                if (arg->delegate_call_back(*arg) != book::action::continu) 
-                    return book::action::leave;
+                if (arg->delegate_call_back(*arg) != log::action::continu) 
+                    return log::action::leave;
             }
         }
     }
@@ -145,11 +140,11 @@ book::action  line::process()
         if(defaults.enabled)
         {
              r = defaults.delegate_call_back(defaults);
-             if (r != book::action::continu)
-                 return book::action::leave;
+             if (r != log::action::continu)
+                 return log::action::leave;
         }
     }
-    return book::action::continu;
+    return log::action::continu;
 }
 
 cmd_switch &line::operator[](const std::string &ArgName)

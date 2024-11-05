@@ -13,8 +13,8 @@
 
 #pragma once
 
-#include "tuxvision/tools/actions.h"
-#include "tuxvision/journal/book.h"
+#include <tuxic/tools/actions.h>
+#include <tuxic/tools/logger.h>
 
 
 
@@ -22,7 +22,7 @@ namespace tux::cmd
 {
 
 
-struct _TUXVISION_ cmd_switch
+struct TUXIC_TOOLS cmd_switch
 {
     using data = std::vector<std::string_view>;
     using array = std::vector<cmd_switch*>;
@@ -43,7 +43,7 @@ struct _TUXVISION_ cmd_switch
     signals::action<cmd_switch&> delegate_call_back;
     bool operator !() { return delegate_call_back.empty(); }
 
-    template<typename T> void connect(T* Obj, book::action (T::*Fn)(cmd_switch&)){
+    template<typename T> void connect(T* Obj, log::action (T::*Fn)(cmd_switch&)){
         delegate_call_back.connect(Obj, Fn);
     }
     cmd_switch& set_descriptions(const std::string& Txt);
@@ -55,7 +55,7 @@ struct _TUXVISION_ cmd_switch
 };
 
 
-class _TUXVISION_ line
+class TUXIC_TOOLS line
 {
 
     cmd_switch::array arguments;
@@ -66,7 +66,7 @@ public:
     line() = default;
     ~line();
 
-    template<typename T> void set_default_callback(T* Obj, book::code (T::*Fn)(cmd_switch&))
+    template<typename T> void set_default_callback(T* Obj, log::code (T::*Fn)(cmd_switch&))
     {
         (void)defaults.delegate_call_back.connect(Obj, Fn);
     }
@@ -74,10 +74,10 @@ public:
     cmd_switch::iterator query(std::string_view cmd_switch);
     cmd_switch& operator<<(const cmd_switch& Arg);
     cmd_switch& operator [] (const std::string& ArgName);
-    //Book::Enums::Code InputCmdLineData(int argc, char** argv);
-    book::code input(const std::vector<std::string_view>& StrArray);
+    //log::Enums::Code InputCmdLineData(int argc, char** argv);
+    log::code input(const std::vector<std::string_view>& StrArray);
     cmd_switch& add_cmd(const std::string& cId);
-    book::action process();
+    log::action process();
     bool empty() { return arguments.empty(); }
     std::string usage();
 };

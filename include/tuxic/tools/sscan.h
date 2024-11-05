@@ -17,14 +17,15 @@
 
 #pragma once
 
-#include "tuxvision/journal/book.h"
+#include <tuxic/tools/logger.h>
+
  
 using namespace std::literals;
 
 namespace tux
 {
 
-class _TUXVISION_ sscan
+class TUXIC_TOOLS sscan
 {
     const char* m_end{nullptr};
     const char* m_pos{nullptr};
@@ -35,21 +36,21 @@ public:
 
     using iterator = const char*;
 
-    struct _TUXVISION_  [[maybe_unused]] context
+    struct TUXIC_TOOLS  [[maybe_unused]] context
     {
         sscan::iterator m_pos{nullptr};
         sscan::iterator m_begin{nullptr};
-        book::code  Return{book::code::notimplemented};
+        log::code  Return{log::code::notimplemented};
         //...
     };
 
-    struct _TUXVISION_ numeric
+    struct TUXIC_TOOLS numeric
     {
         private:
         static sscan empty;
         public:
 
-        struct _TUXVISION_ details
+        struct TUXIC_TOOLS details
         {
             std::string_view seq;
             enum class base_size : char
@@ -85,7 +86,7 @@ public:
             void scale_value();
         };
 
-        using result = std::pair<book::code, sscan::numeric::details>;
+        using result = std::pair<log::code, sscan::numeric::details>;
 
         sscan& text{sscan::numeric::empty};
 
@@ -102,19 +103,19 @@ public:
 
 
         ~numeric() = default;
-        book::code operator()();
+        log::code operator()();
 
 
-        book::code base2();
-        book::code base8();
-        book::code base10();
-        book::code base16();
+        log::code base2();
+        log::code base8();
+        log::code base10();
+        log::code base16();
 
         void sign();
     };
 
 public:
-    struct _TUXVISION_ location_data
+    struct TUXIC_TOOLS location_data
     {
         // { \n; \n\r; \r\n; \r }
         std::size_t line{0};
@@ -145,9 +146,9 @@ public:
     bool eof();
     bool eof(sscan::iterator cc);
 
-    book::code seek(int32_t Idx = 0);
-    book::code step(int32_t Idx = -1);
-    book::code seek_at(const std::string_view& seq, int32_t m_pos=-1);
+    log::code seek(int32_t Idx = 0);
+    log::code step(int32_t Idx = -1);
+    log::code seek_at(const std::string_view& seq, int32_t m_pos=-1);
 
     explicit operator bool() const;
     [[nodiscard]] inline bool empty() const { return m_end==m_begin;}
@@ -165,8 +166,8 @@ public:
 
     //Scanners:
     sscan::numeric::result scan_number();
-    std::pair<book::code, std::string_view> scan_literal_string();
-    std::pair<book::code, std::string_view> scan_identifier();
+    std::pair<log::code, std::string_view> scan_literal_string();
+    std::pair<log::code, std::string_view> scan_identifier();
 
     sscan::iterator start_sequence();
     std::pair<sscan::iterator,sscan::iterator> end_sequence();
@@ -175,7 +176,7 @@ public:
         m_pos = m_pos;
         sync();
     }
-    std::pair<sscan::iterator, sscan::iterator> scan(const std::function<book::code()>& ScannerFn);
+    std::pair<sscan::iterator, sscan::iterator> scan(const std::function<log::code()>& ScannerFn);
 
     // ------------------------------------------------------------------
     void push_location();
@@ -195,7 +196,7 @@ public:
     sscan::iterator end();
 
 
-    book::code reposition(std::size_t Offset);
+    log::code reposition(std::size_t Offset);
 
 
 private:

@@ -10,8 +10,7 @@
  *   Copyrights from authors other than Serge Lussier also apply here      *
  ***************************************************************************/
 
-#include "tuxvision/tools/object.h"
-
+#include <tuxic/tools/object.h>
 
 
 
@@ -29,7 +28,7 @@ object::~object()
 {
     for(auto* o : m_children)
     {
-        book::info() << book::fn::func << " destroy ['" << std::format("{:^20s}", o->id()) << "'] @" << o;
+        log::info() << log::fn::func << " destroy ['" << std::format("{:^20s}", o->id()) << "'] @" << o;
         delete o;
     }
     m_children.clear();
@@ -74,7 +73,7 @@ void object::append_child(object *o)
 {
     if(get_child_iterator(o) != m_children.end())
     {
-        book::warning() << book::fn::func << color::yellow << id() << color::reset << " already has child '" << color::yellow << o->id() << color::reset << "'";
+        log::warning() << log::fn::func << color::yellow << id() << color::reset << " already has child '" << color::yellow << o->id() << color::reset << "'";
         return;
     }
     m_children.push_back(o);
@@ -86,13 +85,13 @@ std::string object::pretty_id() const
 {
     tux::string text;
 
-    auto [gh,colors] = book::return_code_attributes(book::code::object_ptr);
+    auto [gh,colors] = log::return_code_attributes(log::code::object_ptr);
     text
         | colors()
         | gh
         | class_name()
         | color::reset | "::";
-    auto [gl, cc] = book::return_code_attributes(book::code::object_id);
+    auto [gl, cc] = log::return_code_attributes(log::code::object_id);
     text
         | cc()
         | gl
@@ -103,19 +102,19 @@ std::string object::pretty_id() const
 }
 
 
-book::code object::detach(object *ObjPtr)
+log::code object::detach(object *ObjPtr)
 {
     if(ObjPtr)
     {
         auto O = get_child_iterator(ObjPtr);
-        if(O == m_children.end() ) return book::code::rejected;
+        if(O == m_children.end() ) return log::code::rejected;
         m_children.erase(O);
-        return book::code::accepted;
+        return log::code::accepted;
     }
 
-    if(!m_parent) return book::code::rejected;
+    if(!m_parent) return log::code::rejected;
     m_parent->detach(this);
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
 

@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "tuxvision/journal/book.h"
+#include <tuxic/tools/logger.h>
 #include <functional>
 #include <utility>
 
@@ -33,10 +33,10 @@ template<typename... Args> class action
 public:
     std::string m_id{"anonymous signal"};
     int16_t    Handle{-1};
-    using slot = std::function<book::action(Args...)>;
+    using slot = std::function<log::action(Args...)>;
     using array = std::vector<typename action::slot>;
     using iterator = typename action::array::iterator;
-    using accumulator = std::vector<book::action>;
+    using accumulator = std::vector<log::action>;
 
     action() = default;
     ~action() = default;
@@ -82,7 +82,7 @@ public:
 
     // Connects a std::function to the notifier. The returned
     // value can be used to Disconnect the function again.
-    int16_t connect(std::function<book::action(Args...)> const &aslot) const
+    int16_t connect(std::function<log::action(Args...)> const &aslot) const
     {
         _slots.push_back(aslot);
         return (_slots.size()-1) & 0x7FFF;
@@ -90,7 +90,7 @@ public:
 
     // Convenience member method to Connect explicitly a member function of an
     // object to this notifier.
-    template<typename T> int16_t connect_member(T *inst, book::action(T::* fun)(Args...))
+    template<typename T> int16_t connect_member(T *inst, log::action(T::* fun)(Args...))
     {
         return connect([=](Args... args)
                        {
@@ -100,7 +100,7 @@ public:
 
     // Convenience method to Connect a member function of an
     // object to this notifier.
-    template<typename T> int16_t connect(T *inst, book::action(T::* fun)(Args...))
+    template<typename T> int16_t connect(T *inst, log::action(T::* fun)(Args...))
     {
         return connect([=](Args... args)
                        {
@@ -111,7 +111,7 @@ public:
 
     // Convenience method to Connect a const member function
     // of an object to this notifier.
-    template<typename T> int16_t Connect(T *inst, book::action(T::* fun)(Args...) const)
+    template<typename T> int16_t Connect(T *inst, log::action(T::* fun)(Args...) const)
     {
         return connect([=](Args... args)
                        {
@@ -135,46 +135,46 @@ public:
     }
 
     //// Calls all connected functions.
-    book::action operator()(Args... p)
+    log::action operator()(Args... p)
     {
         if (_slots.empty())
-            return book::action::continu;
-        book::action R;
+            return log::action::continu;
+        log::action R;
         for (auto const &fn: _slots)
         {
             R = fn(p...);
             if (_acc) _acc->push_back(R);
-            if (R != book::action::continu) return R;
+            if (R != log::action::continu) return R;
         }
         return R;
     }
 
 
     // Calls all connected functions except for one.
-    book::action emit_for_all_but_one(const std::string &id_, Args... p)
+    log::action emit_for_all_but_one(const std::string &id_, Args... p)
     {
-        book::action R;
+        log::action R;
         for (auto const &it: _slots)
         {
             if (it.m_id != id_)
             {
                 R = it(p...);
                 if (_acc) _acc->push_back(R);
-                if (R != book::action::continu) return R;
+                if (R != log::action::continu) return R;
             }
         }
         return R;
     }
 
     // Calls only one connected function.
-    book::action to(int16_t id_, Args... p)
+    log::action to(int16_t id_, Args... p)
     {
-        book::action R;
+        log::action R;
         if (id_ >= _slots.size())
         {
             R = (*_slots[id_])(p...);
             if (_acc) _acc->push_back(R);
-            if (R != book::action::continu) return R;
+            if (R != log::action::continu) return R;
         }
         return R;
     }
@@ -198,7 +198,7 @@ namespace tux
 
 
 
-template<typename Ret=book::action, typename ...Parameters> class notifier_signal
+template<typename Ret=log::action, typename ...Parameters> class notifier_signal
 {
     std::string m_id{"anonymous signal"};
     int16_t     handle{-1};
@@ -307,7 +307,7 @@ public:
     }
 
     //// Calls all connected functions.
-    // std::pair<Book::action, Ret>
+    // std::pair<log::action, Ret>
     Ret operator()(Parameters... p)
     {
         if (_slots.empty())

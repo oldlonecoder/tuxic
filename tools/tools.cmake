@@ -15,14 +15,16 @@ add_library("tuxic.${Target}" SHARED
             include/${FRAMEWORK}/${Target}/glyphes.h    ${Target}/cc/glyphes.cc
             include/${FRAMEWORK}/${Target}/cadres.h     ${Target}/cc/cadres.cc
             include/${FRAMEWORK}/${Target}/string.h     ${Target}/cc/string.cc
-#            include/${FRAMEWORK}/${Target}/geometry.h src/tools/geometry.cc
-#            include/${FRAMEWORK}/${Target}/tools/cmdargs.h src/tools/cmdargs.cc
-#            include/${FRAMEWORK}/${Target}/tools/sscan.h src/tools/sscan.cc
-#            include/${FRAMEWORK}/${Target}/object.h src/tools/object.cc
-#            include/${FRAMEWORK}/${Target}/actions.h
-#            # include/${BaseTarget}/ui/widget.input_track.h src/ui/widget/input_track.cc
-#            # include/${BaseTarget}/ui/widget/statusbar.h src/ui/widget/statusbar.cc
-#            include/${FRAMEWORK}/${Target}/journal/book.h src/journal/book.cc
+            include/${FRAMEWORK}/${Target}/logger.h     ${Target}/cc/logger.cc
+            include/${FRAMEWORK}/${Target}/object.h     ${Target}/cc/object.cc
+            include/${FRAMEWORK}/${Target}/geometry.h   ${Target}/cc/geometry.cc
+            include/${FRAMEWORK}/${Target}/actions.h
+            include/${FRAMEWORK}/${Target}/cmdargs.h    ${Target}/cc/cmdargs.cc
+            include/${FRAMEWORK}/${Target}/sscan.h      ${Target}/cc/sscan.cc
+
+            #
+            #            # include/${BaseTarget}/ui/widget.input_track.h src/ui/widget/input_track.cc
+            #            # include/${BaseTarget}/ui/widget/statusbar.h src/ui/widget/statusbar.cc
 #
 #            include/${FRAMEWORK}/${Target}/lexer/lexer_types.h       src/lexer/lexer_types.cc
 #            include/${FRAMEWORK}/${Target}/lexer/token_data.h        src/lexer/token_data.cc
@@ -78,18 +80,18 @@ install(DIRECTORY
 )
 
 
-add_custom_target("uninstall" COMMENT "Uninstall installed files")
-add_custom_command(
-    TARGET "uninstall"
-    POST_BUILD
-    COMMENT "Uninstall files with install_manifest.txt"
-    COMMAND xargs rm -vf < install_manifest.txt || echo Nothing in
-    install_manifest.txt to be uninstalled!
-)
-# Enable packaging
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PACKAGE_NAME "tuxic.${Target}")
-set(CPACK_GENERATOR "TGZ")
+#add_custom_target("uninstall" COMMENT "Uninstall installed files")
+#add_custom_command(
+#    TARGET "uninstall"
+#    POST_BUILD
+#    COMMENT "Uninstall files with install_manifest.txt"
+#    COMMAND xargs rm -vf < install_manifest.txt || echo Nothing in
+#    install_manifest.txt to be uninstalled!
+#)
+## Enable packaging
+#set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+#set(CPACK_PACKAGE_NAME "tuxic.${Target}")
+#set(CPACK_GENERATOR "TGZ")
 
 # Include CPack
 #include(CPack) # Scrap!! No way to include header files!
