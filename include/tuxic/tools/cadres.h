@@ -29,7 +29,7 @@ namespace tux
 
 using namespace integers;
 
-struct TUXIC_TOOLS cadre
+struct TUXIC_FRM cadre
 {
     color::pair colors;     ///< colours of the box::frame
 
@@ -38,7 +38,7 @@ struct TUXIC_TOOLS cadre
  * @brief 1v x 4h matrix for addressing Frame components
  * @note  : Source : https://github.com/ArthurSonzogni/FTXUI/blob/main/src/ftxui/screen/string.cpp
  */
-    struct TUXIC_TOOLS frame_matrix
+    struct TUXIC_FRM frame_matrix
     {
         uint8_t Left : 2;
         uint8_t Top  : 2;
@@ -49,7 +49,7 @@ struct TUXIC_TOOLS cadre
         bool operator < (cadre::frame_matrix RHS) const;
     };
 
-    struct TUXIC_TOOLS frame_data
+    struct TUXIC_FRM frame_data
     {
         glyph::T TL; ///< Top Left
         glyph::T TR; ///< Top Right

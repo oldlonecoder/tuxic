@@ -1,5 +1,9 @@
-//#ifndef TUX_STRING_H
-//#define TUX_STRING_H
+//
+// Created by oldlonecoder on 8/19/24.
+//
+
+//#ifndef VARIABLE_H
+//#define VARIABLE_H
 /***************************************************************************
  *   Copyright (C) 1965/1987/2023 by Serge Lussier                         *
  *   serge.lussier@oldlonecoder.club                                       *
@@ -14,42 +18,31 @@
 
 
 #pragma once
-#include <tuxvision/ui/widget/window.h>
+#include <tuxic/est/node.h>
+#include <stack>
 
+namespace tux::est {
 
-namespace tux::ui::terminal
+class TUXIC_FRM variable : public node
 {
-/*!
- * @brief screen's double back-buffer to be studied...
- */
-class TUXIC_FRM desktop : public widget
-{
-    CLASSNAME(desktop)
+    std::stack<alu> _stack_{};
 
-    terminal::vchar::back_buffer _screen_buffer_{nullptr};
-
-    std::vector<rectangle> _dirty_stack_{};
-    std::list<window*> _windows_{};
-
-
-    static desktop* the_screen;
-    void refresh_zorder();
-    void render_dirty(const ui::rectangle& rect);
-
-    terminal::vchar::string::iterator peek_sb(ui::cxy xy);
 public:
-    desktop();
-    explicit desktop(const std::string& _id);
-    ~desktop() override;
 
+    using list = std::vector<variable*>;
 
-    log::code update() override;
+    variable() = default;
+    variable(node* a_parent_node, lex_token* a_node, alu* a_alu);
+
+    ~variable() override=default;
+
+    alu JSR() override { return *_a_;};
 protected:
-    friend class tux::ui::window;
-    friend class tux::ui::widget;
-
-    log::code dirty(const rectangle& _dirty_rect) override;
+    void push();
+    alu  pop();
 
 };
 
-}
+} // est
+
+//#endif //VARIABLE_H

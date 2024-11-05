@@ -22,7 +22,7 @@
 
 
 #include <tuxic/tools/string.h>
-//#include "tuxvision/journal/book.h"
+//#include "tuxic/journal/book.h"
 
 #define out std::cout
 #define lend std::endl;

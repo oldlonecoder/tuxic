@@ -25,7 +25,7 @@
 namespace tux::ui
 {
 
-class _TUXVISION_ status_bar : public widget
+class TUXIC_FRM status_bar : public widget
 {
     CLASSNAME(statubar)
 
@@ -33,19 +33,19 @@ public:
     status_bar() : widget(){};
     ~status_bar() override=default;
     status_bar(widget* _parent, const std::string& _id);
-    book::code show() override;
+    log::code show() override;
     void       activate() override;
     void       set_focus() override;
-    book::code update() override;
+    log::code update() override;
 
-    book::code draw() override;
+    log::code draw() override;
 
     widget* add_widget(const std::string& wid, ui::anchor::value av);
     label*  add_label(const std::string& lid, ui::anchor::value av, ui::components::type cc, const std::string& _initial_text={});
 
 
 protected:
-    book::code dirty(const rectangle& dirty_rect) override;
+    log::code dirty(const rectangle& dirty_rect) override;
 
 };
 

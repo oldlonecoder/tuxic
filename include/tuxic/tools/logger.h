@@ -21,7 +21,7 @@
 
 #include <tuxic/tools/glyphes.h>
 #include <tuxic/tools/string.h>
-//#include "tuxvision/journal/enums.h"
+//#include "tuxic/journal/enums.h"
 #include <source_location>
 
 #include <functional>
@@ -43,7 +43,7 @@ namespace tux
 {
 class object;
 
-class TUXIC_TOOLS log
+class TUXIC_FRM log
 {
 public:
     struct header_component
@@ -136,15 +136,15 @@ public:
     };
 
 
-    static std::string TUXIC_TOOLS to_string(log::type enum_type);
-    static std::string TUXIC_TOOLS to_string(log::code enum_code);
-    static std::string TUXIC_TOOLS to_string(log::fn   enum_fn);
-    static std::string TUXIC_TOOLS to_string(log::action enum_action);
+    static std::string TUXIC_FRM to_string(log::type enum_type);
+    static std::string TUXIC_FRM to_string(log::code enum_code);
+    static std::string TUXIC_FRM to_string(log::fn   enum_fn);
+    static std::string TUXIC_FRM to_string(log::action enum_action);
 
-    static std::pair<glyph::type, color::pair> TUXIC_TOOLS type_attributes         (log::type enum_type);
-    static std::pair<glyph::type, color::pair> TUXIC_TOOLS return_code_attributes  (log::code enum_code);
-    static std::pair<glyph::type, color::pair> TUXIC_TOOLS function_attributes     (log::fn enum_fn);
-    static std::pair<glyph::type, color::pair> TUXIC_TOOLS action_attributes       (log::action enum_action);
+    static std::pair<glyph::type, color::pair> TUXIC_FRM type_attributes         (log::type enum_type);
+    static std::pair<glyph::type, color::pair> TUXIC_FRM return_code_attributes  (log::code enum_code);
+    static std::pair<glyph::type, color::pair> TUXIC_FRM function_attributes     (log::fn enum_fn);
+    static std::pair<glyph::type, color::pair> TUXIC_FRM action_attributes       (log::action enum_action);
 
 
 
@@ -170,7 +170,7 @@ private:
     header_component _headercomp_{1,1,1,1,1,1};
 public:
 
-    // struct TUXIC_TOOLS logentry
+    // struct TUXIC_FRM logentry
     // {
     //     tux::string _text_{};
     //     using logs = std::vector<log::logentry>;
@@ -262,7 +262,7 @@ public:
     void init_header();
     static void purge(const std::function<void(log &)>& f);
 
-    struct TUXIC_TOOLS section
+    struct TUXIC_FRM section
     {
         std::string id;   ///< Section ID which is also the base name of the output file.
         std::ofstream ofs;
@@ -287,7 +287,7 @@ public:
     static log::code end();
     static log::code endl();
 
-    class TUXIC_TOOLS exception :  public std::exception
+    class TUXIC_FRM exception :  public std::exception
     {
     public:
 

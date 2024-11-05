@@ -28,7 +28,7 @@
 namespace tux::ui
 {
 
-class _TUXVISION_ application
+class TUXIC_FRM application
 {
     //OBJECT_REFLECT(application)
 
@@ -48,8 +48,8 @@ public:
     virtual ~application();
     application(std::string app_name, int argc, char **argv);
 
-    virtual book::code run(){ return book::code::notimplemented;}
-    virtual book::code terminate();
+    virtual log::code run(){ return log::code::notimplemented;}
+    virtual log::code terminate();
 
 
     static application& app();
@@ -58,9 +58,9 @@ public:
 
 
 protected:
-    virtual book::code setup();
-    virtual book::code setup_ui(){ return book::code::reimplement; }
-    virtual book::code install_signals();
+    virtual log::code setup();
+    virtual log::code setup_ui(){ return log::code::reimplement; }
+    virtual log::code install_signals();
 
     virtual size_t push_event(event&& ev);
     virtual event pop_event();

@@ -15,7 +15,7 @@
 
 #pragma once
 
-#include "tuxvision/exports"
+#include "tuxic/exports"
 #include <tuxvision/ui/globals.h>
 #include <tuxvision/journal/book.h>
 #include <tuxvision/tools/actions.h>
@@ -29,13 +29,13 @@ rectangle geometry();
 
 
 
-book::code query_winch();
+log::code query_winch();
 
 //static terminal& instance();
 //terminal();
 
-book::code begin();
-book::code end();
+log::code begin();
+log::code end();
 
 
 void switch_alternate();
@@ -79,7 +79,7 @@ enum class DECMode
 
 constexpr const char* CSI = "\x1b[";
 signals::action<rectangle>& term_resize_signal();
-book::code update_widget(object* _widget);
+log::code update_widget(object* _widget);
 
 
 }

@@ -25,7 +25,7 @@ desktop::desktop(const std::string &_id):widget(nullptr,_id)
 {
     if(desktop::the_screen)
     {
-        book::error() << book::fn::func << pretty_id() << " cannot create another screen widget  : use '" << desktop::the_screen->id() << "' instead and destroy this non-usable instance.";
+        log::error() << log::fn::func << pretty_id() << " cannot create another screen widget  : use '" << desktop::the_screen->id() << "' instead and destroy this non-usable instance.";
         return ;
     }
     //...
@@ -36,7 +36,7 @@ desktop::~desktop()
 = default;
 
 
-book::code desktop::update()
+log::code desktop::update()
 {
 
     return widget::update();
@@ -90,14 +90,14 @@ terminal::vchar::string::iterator desktop::peek_sb(ui::cxy xy)
 }
 
 
-book::code desktop::dirty(const rectangle& _dirty_rect)
+log::code desktop::dirty(const rectangle& _dirty_rect)
 {
     auto area = _geometry_.tolocal() & _dirty_rect;
     if(!area)
-        return book::code::rejected;
+        return log::code::rejected;
 
     _dirty_stack_.emplace_back(area); // So all rectangles in the dirty stack are pre-validated.
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
 

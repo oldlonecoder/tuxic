@@ -31,18 +31,18 @@ widget::painter_dc::painter_dc(widget *parent_widget, const rectangle &r):_widge
     //...
 }
 
-book::code widget::painter_dc::at(cxy xy)
+log::code widget::painter_dc::at(cxy xy)
 {
 
     if(!_geometry_.tolocal()[xy])
     {
-        book::error() << book::fn::func << book::code::oob << " -> " << color::red4 << xy << color::reset << " within rect:" << color::yellow << _geometry_.tolocal();
-        return book::code::oob;
+        log::error() << log::fn::func << log::code::oob << " -> " << color::red4 << xy << color::reset << " within rect:" << color::yellow << _geometry_.tolocal();
+        return log::code::oob;
     }
-    //book::debug() << color::lime << _widget_->id() << color::reset << "->painter_dc invokes  at(" << color::yellow << (xy +  _geometry_.a) << color::reset << "):";
+    //log::debug() << color::lime << _widget_->id() << color::reset << "->painter_dc invokes  at(" << color::yellow << (xy +  _geometry_.a) << color::reset << "):";
     _geometry_.goto_xy(xy);
     _iterator_ = _widget_->at(xy +  _geometry_.a);
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
 
@@ -52,7 +52,7 @@ book::code widget::painter_dc::at(cxy xy)
  *  Make sure that our internal _iterator_ is in sync with the internal _geometry_.cursor position.
  * \return result from at(_geometry_.cursor);
  */
-book::code widget::painter_dc::sync()
+log::code widget::painter_dc::sync()
 {
     return at(_geometry_.cursor);
 }
@@ -70,21 +70,21 @@ book::code widget::painter_dc::sync()
 widget::painter_dc &widget::painter_dc::clear(const rectangle &r)
 {
     auto area = r;
-    // book::debug() << book::fn::fun << "arg (rectangle r) =  " << color::yellow << r << color::reset;
+    // log::debug() << log::fn::fun << "arg (rectangle r) =  " << color::yellow << r << color::reset;
     if(!area)
         area = _geometry_.tolocal();
 
-    book::out() << "clear area: " << color::red4 << area << color::reset;
+    log::out() << "clear area: " << color::red4 << area << color::reset;
     // if(auto p = _widget_->parent<widget>(); p)
     // {
-    //     book::out() << " clear child '" << color::lime << _widget_->id() << color::reset << "' " << color::lime << _widget_->_geometry_ << color::reset <<" of parent: '" << color::yellow << p->id() << color::reset;
+    //     log::out() << " clear child '" << color::lime << _widget_->id() << color::reset << "' " << color::lime << _widget_->_geometry_ << color::reset <<" of parent: '" << color::yellow << p->id() << color::reset;
     // }
     for(int y = 0; y < area.dwh.h; y++)
     {
         at(ui::cxy{0,y});
 
         std::fill(_iterator_, _iterator_ + area.dwh.w, terminal::vchar(_colors_));
-         // book::out() << "check(first char on line #"
+         // log::out() << "check(first char on line #"
          //             << color::yellow
          //             << y<< color::reset << ":"
          //             << color::lime << _widget_->class_name()
@@ -116,18 +116,18 @@ widget::painter_dc &widget::painter_dc::set_background_color(color::code bgcol)
 }
 
 
-book::code widget::painter_dc::operator ++()
+log::code widget::painter_dc::operator ++()
 {
     if(_iterator_ >= _widget_->_bloc_->end())
-        return book::code::rejected;
+        return log::code::rejected;
     ++_iterator_;
     ++_geometry_; // advance internal xy cursor
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
-book::code widget::painter_dc::operator +=(size_t _offset)
+log::code widget::painter_dc::operator +=(size_t _offset)
 {
-    if(!_geometry_.goto_xy(_geometry_.cursor + ui::cxy{static_cast<int>(_offset),0})) return book::code::rejected;
+    if(!_geometry_.goto_xy(_geometry_.cursor + ui::cxy{static_cast<int>(_offset),0})) return log::code::rejected;
     return at(_geometry_.cursor);
 }
 
@@ -135,9 +135,9 @@ book::code widget::painter_dc::operator +=(size_t _offset)
 widget::painter_dc& widget::painter_dc::operator << (ui::cxy new_xy)
 {
     if(!at(new_xy))
-        throw book::exception()
+        throw log::exception()
         [
-            book::except() << book::fn::func << book::code::oob << color::red4 << new_xy << color::reset << " > " << color::yellow << _widget_->_geometry_.tolocal()
+            log::except() << log::fn::func << log::code::oob << color::red4 << new_xy << color::reset << " > " << color::yellow << _widget_->_geometry_.tolocal()
         ];
 
     return *this;
@@ -157,7 +157,7 @@ widget::painter_dc& widget::painter_dc::operator << (const char* str)
     auto cz = *_geometry_.width() - _geometry_.cursor.x;
     cz = std::min(static_cast<int>(z), cz);
 
-    book::debug() << book::fn::func << color::lime << _widget_->id() << color::reset << " computed width:" << color::hotpink4 << cz;
+    log::debug() << log::fn::func << color::lime << _widget_->id() << color::reset << " computed width:" << color::hotpink4 << cz;
 
     for (int c = 0; c < cz ; c++)
     {

@@ -31,7 +31,7 @@ class desktop;
 }
 
 
-class _TUXVISION_ widget : public object
+class TUXIC_FRM widget : public object
 {
     CLASSNAME(widget)
 
@@ -46,18 +46,18 @@ public:
     ~widget() override;
 
 
-    book::code set_geometry(const rectangle& r);
-    book::code set_theme(const std::string& theme_id);
+    log::code set_geometry(const rectangle& r);
+    log::code set_theme(const std::string& theme_id);
     std::string theme_name(){ return _theme_id_; };
 
-    book::code peek_xy(ui::cxy xy);
+    log::code peek_xy(ui::cxy xy);
     terminal::vchar::string::iterator at(ui::cxy xy);
     terminal::vchar::string::iterator operator[](ui::cxy xy);
     widget& operator*() { return *this; }
-    book::code set_anchor(ui::anchor::value _ank);
-    virtual book::code show(ui::uistate::Type st);
-    virtual book::code show();
-    virtual book::code hide();
+    log::code set_anchor(ui::anchor::value _ank);
+    virtual log::code show(ui::uistate::Type st);
+    virtual log::code show();
+    virtual log::code hide();
 
 
 
@@ -72,7 +72,7 @@ public:
     [[nodiscard]] bool is_window() const { return _uistyle_& ui::uistyle::Window; }
 
 
-    class _TUXVISION_ painter_dc
+    class TUXIC_FRM painter_dc
     {
         rectangle _geometry_{};
         widget* _widget_{nullptr};
@@ -86,8 +86,8 @@ public:
         painter_dc() = default;
         ~painter_dc() = default;
         painter_dc(widget* parent_widget, const rectangle& r);
-        book::code at(ui::cxy xy);
-        book::code sync();
+        log::code at(ui::cxy xy);
+        log::code sync();
         painter_dc& home();
         painter_dc& clear(const rectangle& r={});
         painter_dc& operator << (ui::cxy new_xy);
@@ -104,15 +104,15 @@ public:
         painter_dc& operator << (terminal::vchar::string strvch);
         painter_dc& set_background_color(color::code bgcol);
         painter_dc& operator*() { return *this; }
-        book::code operator ++();
-        book::code operator +=(size_t _offset);
+        log::code operator ++();
+        log::code operator +=(size_t _offset);
     };
 
-    virtual book::code draw();
+    virtual log::code draw();
     widget::painter_dc begin_draw(const rectangle& sub_area={});
     void end_draw(widget::painter_dc& edc);
     void clear();
-    virtual book::code update();
+    virtual log::code update();
 
 /*
     static constexpr u16 None      = 0;
@@ -137,9 +137,9 @@ public:
     bool has_status(ui::uistate::Type b);
     bool has_class(ui::uiclass::Type b);
 
-    book::code anchor_widget(widget* w);
+    log::code anchor_widget(widget* w);
 
-    virtual book::code setup_ui();
+    virtual log::code setup_ui();
 
 protected:
     ui::size _size_limits_{0,0, ui::cxy{1,1},ui::cxy{0xFFFF,0xFFFF}};
@@ -164,15 +164,15 @@ protected:
 
     // --------------------------------------------
 
-    virtual book::code auto_fit();
-    virtual book::code resize(ui::size new_sz);
-    virtual book::code draw_frame(const rectangle& r);
-    virtual book::code dirty(const rectangle& dirty_rect);
+    virtual log::code auto_fit();
+    virtual log::code resize(ui::size new_sz);
+    virtual log::code draw_frame(const rectangle& r);
+    virtual log::code dirty(const rectangle& dirty_rect);
     terminal::vchar::string::iterator _iterator_{}; ///< Normal std::vector iterator available for navigation and io.
-    book::code update_child(widget* w);
-    book::code render();
-    book::code position_child(widget* w);
-    virtual book::code setup_components();
+    log::code update_child(widget* w);
+    log::code render();
+    log::code position_child(widget* w);
+    virtual log::code setup_components();
 
 public:
     void set_minimum_size(int w, int h){_size_limits_.min_size = ui::cxy{w,h};}

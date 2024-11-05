@@ -10,7 +10,7 @@ message("Current SourceDir:" ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 add_library("tuxic.${Target}" SHARED
-            include/${FRAMEWORK}/${Target}/defs.h
+            include/defs.h
             include/${FRAMEWORK}/${Target}/colors.h     ${Target}/cc/colors.cc
             include/${FRAMEWORK}/${Target}/glyphes.h    ${Target}/cc/glyphes.cc
             include/${FRAMEWORK}/${Target}/cadres.h     ${Target}/cc/cadres.cc
@@ -78,6 +78,13 @@ install(DIRECTORY
         include/
         DESTINATION "${CMAKE_INSTALL_PREFIX}/include"
 )
+
+install(TARGETS ${FRAMEWORK}.${Target}
+        EXPORT "${FRAMEWORK}.${Target}"
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include)
 
 
 #add_custom_target("uninstall" COMMENT "Uninstall installed files")

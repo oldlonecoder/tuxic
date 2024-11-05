@@ -10,7 +10,6 @@ message("Current SourceDir:" ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 add_library("tuxic.${Target}" SHARED
-            include/${FRAMEWORK}/${Target}/defs.h
             include/${FRAMEWORK}/${Target}/lexer_types.h    ${Target}/cc/lexer_types.cc
             include/${FRAMEWORK}/${Target}/token_data.h     ${Target}/cc/token_data.cc
             include/${FRAMEWORK}/${Target}/tokens_table.h   ${Target}/cc/tokens_table.cc
@@ -42,6 +41,12 @@ install(DIRECTORY
         include/
         DESTINATION "${CMAKE_INSTALL_PREFIX}/include"
 )
+install(TARGETS ${FRAMEWORK}.${Target}
+        EXPORT "${FRAMEWORK}.${Target}"
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include)
 
 
 #add_custom_target("uninstall" COMMENT "Uninstall installed files")

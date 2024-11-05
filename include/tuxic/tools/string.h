@@ -44,7 +44,7 @@ using namespace integers;
 /*!
  * @brief tux string for accumulating substring using std tools such as std::instrstram; ostringstream; std::fmt.
  */
-class TUXIC_TOOLS string final
+class TUXIC_FRM string final
 {
     std::string _d_;
 public:
@@ -133,7 +133,7 @@ public:
     #pragma region tokenizer
     
 
-    struct TUXIC_TOOLS word final
+    struct TUXIC_FRM word final
     {
         std::string::iterator begin{};
         std::string::iterator last{}; ///< not the std::string::end() but really the last valid character pointer int the word.

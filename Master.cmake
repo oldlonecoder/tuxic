@@ -2,7 +2,7 @@
 
 option(BUILD_TOOLS "Enable building (personal) Utility Tools library - Required" 	ON)
 option(BUILD_LEXER "Enable building the Lexer & Tokens Library" 					ON)
-option(BUILD_EST "Enable building EST ([Arithmetic] Expression Syntax Tree) library" OFF)
+option(BUILD_EST "Enable building EST ([Arithmetic] Expression Syntax Tree) library" ON)
 option(BUILD_VISION  "Enable building the Vision (Ansi Text UI) library" 			OFF)
 option(BUILD_TDDV "Build the tests application" 									OFF)
 
@@ -41,6 +41,8 @@ IF( EXISTS "${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json" )
 			${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json
 			)
 ENDIF()
+
+
 
 
 # uninstall target

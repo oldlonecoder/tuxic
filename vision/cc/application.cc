@@ -1,7 +1,7 @@
 
 
-#include "tuxvision/ui/application.h"
-#include "tuxvision/ui/terminal.h"
+#include "tuxic/ui/application.h"
+#include "tuxic/ui/terminal.h"
 #include <csignal>
 #include <utility>
 
@@ -40,9 +40,9 @@ application::~application()
 
 void application::sig_interrupted(int)
 {
-    book::interrupted() << book::eol;
+    log::interrupted() << log::eol;
     terminal::end();
-    book::purge(nullptr);
+    log::purge(nullptr);
     //application::app().terminate();
     exit(0);
 }
@@ -51,18 +51,18 @@ void application::sig_interrupted(int)
 
 void application::sig_aborted(int)
 {
-    book::aborted() << book::eol;
+    log::aborted() << log::eol;
     terminal::end();
-    book::purge(nullptr);
+    log::purge(nullptr);
     //application::app().terminate();
     exit(0);
 }
 
 void application::sig_crash(int)
 {
-    book::segfault()  << book::eol;
+    log::segfault()  << log::eol;
     //terminal::end();
-    //book::purge(nullptr);
+    //log::purge(nullptr);
     //application::app().terminate();
     exit(0);
 }
@@ -79,7 +79,7 @@ void application::sig_winch(int)
 application& application::app()
 {
     if(!application::_app_)
-        throw book::exception() [book::except() << book::fn::func << book::fn::endl << " no instance of application!"];
+        throw log::exception() [log::except() << log::fn::func << log::fn::endl << " no instance of application!"];
 
     return *application::_app_;
 }
@@ -89,42 +89,42 @@ application& application::app()
 //     return desktop::instance();
 // }
 
-book::code application::install_signals()
+log::code application::install_signals()
 {
 
     std::signal(SIGSEGV, &application::sig_crash);
-    book::log() << "signal SIGSEV installed."  << book::eol;
+    log::log() << "signal SIGSEV installed."  << log::eol;
     std::signal(SIGABRT, &application::sig_aborted);
-    book::log() << "signal SIGABRT installed."  << book::eol;
+    log::log() << "signal SIGABRT installed."  << log::eol;
     std::signal(SIGINT, &application::sig_interrupted);
-    book::log() << "signal SIGINT installed."  << book::eol;
+    log::log() << "signal SIGINT installed."  << log::eol;
     std::signal(SIGWINCH, &application::sig_winch);
-    book::log() << "signal SIGWINCH installed."  << book::eol;
+    log::log() << "signal SIGWINCH installed."  << log::eol;
     // std::signal(SIGHUP, &application::sig_winch);
     std::signal(SIGKILL, &application::sig_interrupted);
-    book::log() << "signal SIGKILL installed." << book::eol;
+    log::log() << "signal SIGKILL installed." << log::eol;
     std::signal(SIGTERM, &application::sig_interrupted);
-    book::log() << "signal SIGTERM installed." << book::eol;
+    log::log() << "signal SIGTERM installed." << log::eol;
 
-    return book::code::done;
+    return log::code::done;
 }
 
-book::code application::setup()
+log::code application::setup()
 {
     //...
-    book::init();
+    log::init();
     install_signals();
     terminal::begin();
     //_current_screen_ = &terminal::screen::create("1");
-    return book::code::done;
+    return log::code::done;
 }
 
 
-book::code application::terminate()
+log::code application::terminate()
 {
     terminal::end();
-    book::end();
-    return book::code::reimplement;
+    log::end();
+    return log::code::reimplement;
 }
 
 
@@ -141,7 +141,7 @@ event  application::pop_event()
 {
     if(_events_stack_.empty())
     {
-        book::error() << book::fn::func << book::code::empty << book::eol;
+        log::error() << log::fn::func << log::code::empty << log::eol;
         return {};
     }
 

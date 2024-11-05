@@ -27,7 +27,7 @@
 #    error "non-linux os not implemented yet"
 #endif
 
-#include "tuxvision/journal/book.h"
+#include "tuxic/journal/book.h"
 #include <cstdlib>
 #include <cerrno>
 #include <cstring>
@@ -43,7 +43,7 @@ using namespace integers;
 
 
 
-struct _TUXVISION_ key_event
+struct TUXIC_FRM key_event
 {
         /**
      * @brief Key mnemonics.
@@ -168,12 +168,12 @@ struct _TUXVISION_ key_event
 };
 
 
-struct _TUXVISION_ commandevent
+struct TUXIC_FRM commandevent
 {
 
 };
 
-struct _TUXVISION_ fileinputevent{};
+struct TUXIC_FRM fileinputevent{};
 
 
 // Special handling is required for HMTM which is not described in this document. In order to highlight terminals should support shift-mouseclick while mouse tracking is enabled for the user to copy and paste.
@@ -191,7 +191,7 @@ struct _TUXVISION_ fileinputevent{};
 // 64	MWU	Mouse Wheel Up
 // 65	MWD	Mouse Wheel Down
 // 128	MB8	Mouse Button 8 pressed
-struct _TUXVISION_ mouse
+struct TUXIC_FRM mouse
 {
 
 
@@ -222,18 +222,18 @@ struct _TUXVISION_ mouse
 
 
 
-struct  _TUXVISION_ event
+struct  TUXIC_FRM event
 {
 
     /*
      * using queu = std::queue<event>;
-     * static book::code poll()
+     * static log::code poll()
      *
      */
 
 
-    static book::code get_stdin_event(event& _event_, timeval tv={0xffffffffff,0});
-    static book::code init();
+    static log::code get_stdin_event(event& _event_, timeval tv={0xffffffffff,0});
+    static log::code init();
     static mouse mouse_data;
     operator bool();
 

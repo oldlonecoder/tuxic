@@ -32,12 +32,12 @@ status_bar::status_bar(widget* _parent, const std::string& _id):widget(_parent, 
     set_geometry({{0,0},ui::size{1,1}});
     _geometry_.dwh.set_min_size(-1,1);
     _geometry_.dwh.set_max_size(-1,1);
-    book::test() << pretty_id() << " min-max size are set" << book::eol;
-    book::debug() << " check book::contents size: " << book::current_section->contents.size() << book::eol;
+    log::test() << pretty_id() << " min-max size are set" << log::eol;
+    log::debug() << " check log::contents size: " << log::current_section->contents.size() << log::eol;
 }
 
 
-book::code status_bar::show()
+log::code status_bar::show()
 {
     return widget::show();
 }
@@ -55,13 +55,13 @@ void status_bar::set_focus()
 }
 
 
-book::code status_bar::update()
+log::code status_bar::update()
 {
     return widget::update();
 }
 
 
-book::code status_bar::draw()
+log::code status_bar::draw()
 {
     widget::draw();
 
@@ -103,7 +103,7 @@ label* status_bar::add_label(const std::string& lid, ui::anchor::value av, ui::c
 }
 
 
-book::code status_bar::dirty(const rectangle& dirty_rect)
+log::code status_bar::dirty(const rectangle& dirty_rect)
 {
     return widget::dirty(dirty_rect);
 }

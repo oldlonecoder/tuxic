@@ -356,7 +356,7 @@ constexpr Index Noop_      = 21;
 
 } // namespace operand
 
-struct TUXIC_LEXER lexer_component
+struct TUXIC_FRM lexer_component
 {
 
     static std::map<lex::type::T,     const char*> type_enums;

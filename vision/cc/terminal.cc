@@ -40,16 +40,16 @@ signals::action<rectangle>& term_resize_signal()
 terminal::caret_shapes _shape_{caret_shapes::def};
 
 
-book::code query_winch()
+log::code query_winch()
 {
     winsize win{};
     ioctl(fileno(stdout), TIOCGWINSZ, &win);
     if((!win.ws_col)||(!win.ws_row))
-        return book::code::notexist;
+        return log::code::notexist;
 
     _geometry_ = ui::rectangle{{0,0}, ui::size{static_cast<int>(win.ws_col), static_cast<int>(win.ws_row)}};
-    book::info() << book::fn::func << " terminal resize to:" << color::yellow << std::format("{:>3d}x{:<3d}",_geometry_.dwh.w,_geometry_.dwh.h);
-    return book::code::done;
+    log::info() << log::fn::func << " terminal resize to:" << color::yellow << std::format("{:>3d}x{:<3d}",_geometry_.dwh.w,_geometry_.dwh.h);
+    return log::code::done;
 }
 
 
@@ -61,10 +61,10 @@ void resize_signal(int )
     query_winch();
 }
 
-book::code begin()
+log::code begin()
 {
     if(auto c = terminal::query_winch(); !c)
-        book::error() << book::code::failed << " to get the screen geometry - there will be no boudaries checks. ";
+        log::error() << log::code::failed << " to get the screen geometry - there will be no boudaries checks. ";
 
 
     tcgetattr(STDIN_FILENO, &saved_st);
@@ -83,21 +83,21 @@ book::code begin()
 
     switch_alternate();
 
-    book::out() << " console set to raw mode...";
+    log::out() << " console set to raw mode...";
 
     ::signal(SIGWINCH, &terminal::resize_signal);
     terminal::cursor_off();
     terminal::start_mouse();
-    return book::code::done;
+    return log::code::done;
 }
 
-book::code end()
+log::code end()
 {
     switch_back();
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &saved_st);
     cursor_on();
     terminal::stop_mouse();
-    return book::code::done;
+    return log::code::done;
 }
 
 void switch_alternate()

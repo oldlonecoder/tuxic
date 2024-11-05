@@ -13,7 +13,7 @@
 #pragma once
 
 
-#include "tuxvision/exports"
+#include "tuxic/exports"
 #include <tuxvision/ui/globals.h>
 #include <tuxvision/journal/book.h>
 #include <tuxvision/tools/actions.h>
@@ -27,7 +27,7 @@
 namespace tux::ui::terminal
 {
 
-struct _TUXVISION_ vchar final
+struct TUXIC_FRM vchar final
 {
     u32 d{0x8003A020};
 
@@ -37,7 +37,7 @@ struct _TUXVISION_ vchar final
     using back_buffer = std::shared_ptr<terminal::vchar::string>;
 
 
-    struct _TUXVISION_ bloc final
+    struct TUXIC_FRM bloc final
     {
         ui::size                geometry{};
         terminal::vchar::string  buffer{};
@@ -122,7 +122,7 @@ struct _TUXVISION_ vchar final
 
     static std::string render(const vchar::string& _string);
     static std::string render(const vchar* _blk, int _width);
-    static book::code render_string(vchar::string::iterator start, vchar::string::iterator end);
+    static log::code render_string(vchar::string::iterator start, vchar::string::iterator end);
 
 
 

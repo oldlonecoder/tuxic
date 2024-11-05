@@ -13,7 +13,7 @@
 
 
 
-#include <tuxic/tools/defs.h>
+#include <tuxic/defs.h>
 #include <vector>
 #include <unordered_map>
 #include <string>
@@ -23,7 +23,7 @@
 namespace tux
 {
 
-struct TUXIC_TOOLS color {
+struct TUXIC_FRM color {
     enum code : integers::U16 {
         /*0   */ black = 0,         //#000000	rgb(128,0,0)	hsl(0,100%,25%)
         /*1   */ maroon,            //#800000	rgb(128,0,0)	hsl(0,100%,25%)
@@ -283,7 +283,7 @@ struct TUXIC_TOOLS color {
         /*255 */ reset
     };
 
-    struct TUXIC_TOOLS pair
+    struct TUXIC_FRM pair
     {
         color::code fg = color::white;
         color::code bg = color::grey11;
@@ -292,7 +292,7 @@ struct TUXIC_TOOLS color {
         color::pair &operator>>(std::string &out);
     };
 
-    struct TUXIC_TOOLS data
+    struct TUXIC_FRM data
     {
         color::code Enum = color::reset;
         std::string_view color_name = " ";
@@ -317,7 +317,7 @@ struct TUXIC_TOOLS color {
     static std::string render_html(color::pair a_pair);
     static color::data query_data(color::code a_code);
 
-    // struct TUXIC_TOOLS Item {
+    // struct TUXIC_FRM Item {
     //     std::string Id;
     //     Color::Pair Data;
     //     using array = std::vector<Color::Item>;
@@ -326,7 +326,7 @@ struct TUXIC_TOOLS color {
     // };
 
 
-    // struct TUXIC_TOOLS array {
+    // struct TUXIC_FRM array {
     //     using Dictionary = std::unordered_map<std::string, Color::array>;
     //     std::string Id;
     //     Color::Item::array Items;

@@ -1,6 +1,6 @@
 #include <tuxvision/ui/widget.h>
 
-//#include "tuxvision/ui/widget/uiscreen.h"
+//#include "tuxic/ui/widget/uiscreen.h"
 
 namespace tux::ui
 {
@@ -8,7 +8,7 @@ namespace tux::ui
 
 #define CHECK_BLOC \
 if(!_bloc_)\
-    throw book::exception() [ book::except() <<  book::code::null_ptr << " undefined backbuffer on: "\
+    throw log::exception() [ log::except() <<  log::code::null_ptr << " undefined backbuffer on: "\
    << color::lightsteelblue << class_name()\
    << color::reset <<"::"\
    << color::yellow << id()\
@@ -41,14 +41,14 @@ widget::~widget()= default;
  * \param r ui::rectangle : the requested geometry values.
  * \return
  */
-book::code widget::set_geometry(const rectangle &r)
+log::code widget::set_geometry(const rectangle &r)
 {
-    book::info() << color::yellow << pretty_id() << " requested geometry:" << r << book::eol;
+    log::info() << color::yellow << pretty_id() << " requested geometry:" << r << log::eol;
 
     if(!r)
     {
-        book::error() <<  book::code::null_ptr << " - " << color::yellow << id() << " invalid rectangle!" << book::eol;
-        return book::code::rejected;
+        log::error() <<  log::code::null_ptr << " - " << color::yellow << id() << " invalid rectangle!" << log::eol;
+        return log::code::rejected;
     }
     _geometry_ = r;
     _geometry_.dwh.set_min_size(_size_limits_.min_size.x, _size_limits_.min_size.y);
@@ -58,13 +58,13 @@ book::code widget::set_geometry(const rectangle &r)
         || (r.dwh.w > _size_limits_.max_size.x)
         || (r.dwh.h > _size_limits_.max_size.y))
     {
-        book::error() << r << " does not respect the size requirements of " << pretty_id() << "." << book::fn::endl << "- request rejected. "  << book::eol;
-        return book::code::rejected;
+        log::error() << r << " does not respect the size requirements of " << pretty_id() << "." << log::fn::endl << "- request rejected. "  << log::eol;
+        return log::code::rejected;
     }
 
     if(auto p = parent<widget>(); p)
     {
-        book::out() << "parent [" << color::yellow << p->pretty_id() << "]::bloc is assigned to " << pretty_id() << "." << book::eol;
+        log::out() << "parent [" << color::yellow << p->pretty_id() << "]::bloc is assigned to " << pretty_id() << "." << log::eol;
         if(_uistyle_ & ui::uistyle::Window)  goto TOPLVL;
         _bloc_ = p->_bloc_;
     }
@@ -73,13 +73,13 @@ book::code widget::set_geometry(const rectangle &r)
 TOPLVL:
         _bloc_ = std::make_shared<terminal::vchar::string>(_geometry_.dwh.area(), terminal::vchar(_colors_));
         _uistyle_ |= ui::uistyle::Window;
-        book::out() << pretty_id() << " is a toplevel widget: Thus it owns the back_buffer" << book::eol;
+        log::out() << pretty_id() << " is a toplevel widget: Thus it owns the back_buffer" << log::eol;
     }
 
     _iterator_ = _bloc_.get()->begin();
 
-    book::out() << pretty_id() << color::reset << " assigned geometry:" << _geometry_ << book::eol;
-    return book::code::done;
+    log::out() << pretty_id() << color::reset << " assigned geometry:" << _geometry_ << log::eol;
+    return log::code::done;
 }
 
 /*!
@@ -89,22 +89,22 @@ TOPLVL:
  * \param theme_id
  * \return accepted or rejected if the theme name does not exist.
  */
-book::code widget::set_theme(const std::string &theme_id)
+log::code widget::set_theme(const std::string &theme_id)
 {
     _theme_id_ = theme_id;
     auto const& comp = ui::colors::attr_db::theme().find(_theme_id_);
     if (comp == ui::colors::attr_db::theme().end())
     {
-        book::error() <<  "Theme '" << color::orangered1 <<  _theme_id_ << color::reset << "' not found" << book::eol;
-        return book::code::rejected;
+        log::error() <<  "Theme '" << color::orangered1 <<  _theme_id_ << color::reset << "' not found" << log::eol;
+        return log::code::rejected;
     }
 
     _elements_ = ui::colors::attr_db::theme()[_theme_id_];
     _states_colors_ =  ui::colors::attr_db::theme()[_theme_id_]["Widget"];
     _colors_ = _states_colors_[ui::uistate::Active];
 
-    book::log() << color::yellow << id() << color::reset << " theme set to '" << _states_colors_[_uistate_] << " " <<  _theme_id_ << " " << color::reset << "'.";
-    return book::code::accepted;
+    log::log() << color::yellow << id() << color::reset << " theme set to '" << _states_colors_[_uistate_] << " " <<  _theme_id_ << " " << color::reset << "'.";
+    return log::code::accepted;
 }
 
 /*!
@@ -113,20 +113,20 @@ book::code widget::set_theme(const std::string &theme_id)
  * \param xy
  * \return accepted or rejected if xy is pout of boundaries of local geometry.
  */
-book::code widget::peek_xy(cxy xy)
+log::code widget::peek_xy(cxy xy)
 {
     CHECK_BLOC
 
     if(!_geometry_.tolocal()[xy])
-        throw book::exception()[
-            book::except() << pretty_id() << ": " << book::code::oob << " -> " << color::red4 << xy << color::reset << " within rect:" << color::yellow << _geometry_.tolocal() << book::eol
+        throw log::exception()[
+            log::except() << pretty_id() << ": " << log::code::oob << " -> " << color::red4 << xy << color::reset << " within rect:" << color::yellow << _geometry_.tolocal() << log::eol
         ];
 
     if(auto p = parent<widget>(); p)
     {
         auto pxy = xy + _geometry_.a;
-        //book::debug() << book::fn::fun;
-        // book::out()
+        //log::debug() << log::fn::fun;
+        // log::out()
         //     << color::yellow << id() <<  color::reset << "::" << color::lightsteelblue3 << "peek_xy" << color::reset << "(" << color::yellow << xy << color::reset << ")"
         //     << color::yellow3 << " peek offset in parent: " << color::lime << p->id() << color::reset << ":" << color::red4 << _geometry_.a << color::reset;
         auto r = p->peek_xy(pxy);
@@ -137,12 +137,12 @@ book::code widget::peek_xy(cxy xy)
     }
     else
     {
-        // book::debug() << book::fn::fun << " Assign internal _iterator_ offset at [" << color::yellow << xy << "]:";
+        // log::debug() << log::fn::fun << " Assign internal _iterator_ offset at [" << color::yellow << xy << "]:";
         _iterator_ = _bloc_->begin() + xy.y * *_geometry_.width() + xy.x;
-        // book::out() << "_iterator_ offset (linear position): " << color::hotpink4 << _iterator_-_bloc_->begin() << color::reset;
+        // log::out() << "_iterator_ offset (linear position): " << color::hotpink4 << _iterator_-_bloc_->begin() << color::reset;
     }
-    //book::debug() << color::lime << id() << color::grey100 << "::" << color::lightsteelblue3 << "peek_xy" << color::grey100 << "(" << color::red4 << xy << color::grey100 << ").";
-    return book::code::accepted;
+    //log::debug() << color::lime << id() << color::grey100 << "::" << color::lightsteelblue3 << "peek_xy" << color::grey100 << "(" << color::red4 << xy << color::grey100 << ").";
+    return log::code::accepted;
 }
 
 /*!
@@ -153,7 +153,7 @@ book::code widget::peek_xy(cxy xy)
  */
 terminal::vchar::string::iterator widget::at(cxy xy)
 {
-    //book::debug() << book::fn::fun << color::lime << id() << color::reset << "request at" << color::yellow << xy;
+    //log::debug() << log::fn::fun << color::lime << id() << color::reset << "request at" << color::yellow << xy;
     auto& saved = _iterator_;
     peek_xy(xy);
     auto& request = _iterator_;
@@ -167,43 +167,43 @@ terminal::vchar::string::iterator widget::operator[](cxy xy){ return at(xy); }
 
 
 
-book::code widget::set_anchor(ui::anchor::value _ank)
+log::code widget::set_anchor(ui::anchor::value _ank)
 {
     _anchor_ = _ank;
     // if(_bloc_ && _geometry_)
     //     auto_fit();
     //... We have to check conflicting and confusing bits.
 
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
 
 
 
-book::code widget::show(ui::uistate::Type st)
+log::code widget::show(ui::uistate::Type st)
 {
     _uistate_ |= st | ui::uistate::Visible;
 
-    book::debug() << book::eol;
-    book::out() << id() << " at [" << _geometry_ << "]";
+    log::debug() << log::eol;
+    log::out() << id() << " at [" << _geometry_ << "]";
     if(is_window())
         return render();
 
-    return book::code::ok;
+    return log::code::ok;
 }
 
 
-book::code widget::show()
+log::code widget::show()
 {
     _uistate_ |= ui::uistate::Visible;
     if(is_window())
         return render();
     dirty(_geometry_.tolocal());
-    return book::code::ok;
+    return log::code::ok;
 }
 
 
-book::code widget::hide()
+log::code widget::hide()
 {
     _uistate_ &= ~ui::uistate::Visible;
     if(auto p = parent<widget>(); p)
@@ -212,7 +212,7 @@ book::code widget::hide()
         dr.clear();
         p->end_draw(dr);
     }
-    return book::code::ok;
+    return log::code::ok;
 }
 
 
@@ -283,7 +283,7 @@ bool widget::is_hidden() const
  * At this area, the base class only clears and or reset the back buffer _bloc_ with the current colors
  * \return
  */
-book::code widget::draw()
+log::code widget::draw()
 {
     clear();
     _dirty_area_ = _geometry_.tolocal();
@@ -294,7 +294,7 @@ book::code widget::draw()
         if(auto* w = o->as<widget>(); w)
             w->draw();
 
-    return book::code::done;
+    return log::code::done;
 }
 
 
@@ -305,16 +305,16 @@ book::code widget::draw()
  * \param dirty_rect  mandatory valid rectangle.
  * \return accepted or rejected if dirty_rect is invalid ( nul/unset rectangle )
  */
-book::code widget::dirty(const rectangle &dirty_rect)
+log::code widget::dirty(const rectangle &dirty_rect)
 {
-    //book::debug() << book::fn::fun;
-    // book::out() << color::lime << class_name() << "::" << id() << color::reset
+    //log::debug() << log::fn::fun;
+    // log::out() << color::lime << class_name() << "::" << id() << color::reset
     //             << " dirty_rect" << color::yellow  << dirty_rect;
 
     if(!dirty_rect)
     {
         _dirty_area_ = _geometry_.tolocal();
-        book::info() <<  "invalidated entire geometry of " << color::lightsteelblue3 << class_name() << color::reset <<"::" << color::yellow << id() << book::eol;
+        log::info() <<  "invalidated entire geometry of " << color::lightsteelblue3 << class_name() << color::reset <<"::" << color::yellow << id() << log::eol;
         goto bad_cpp_jump;
     }
 
@@ -324,18 +324,18 @@ book::code widget::dirty(const rectangle &dirty_rect)
         _dirty_area_ |= dirty_rect; // merge/update this _dirty_area_ rectangle with our child 's _dirty_area_.
 
     if(_dirty_area_ = _dirty_area_ & _geometry_.tolocal(); !_dirty_area_)
-        return book::code::rejected;
+        return log::code::rejected;
 
 
-    //book::debug() << book::fn::fun << color::red4 << class_name() << "::" << id() << color::reset << " computed dirty area: " <<  color::yellow << _dirty_area_ << color::reset;
+    //log::debug() << log::fn::fun << color::red4 << class_name() << "::" << id() << color::reset << " computed dirty area: " <<  color::yellow << _dirty_area_ << color::reset;
 bad_cpp_jump:
     if(auto p = parent<widget>(); p != nullptr)
     {
-        //book::out() << color::yellow << "signal parent widget '" << color::lime << p->id() << color::reset << "' :";
+        //log::out() << color::yellow << "signal parent widget '" << color::lime << p->id() << color::reset << "' :";
         return p->dirty(_dirty_area_+_geometry_.a);
     }
 
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
 
@@ -346,9 +346,9 @@ bad_cpp_jump:
  * \param w
  * \return rejected if invalid computed rectangle ( requested area not visible within this geometry, or child widget has no current dirty area to update.).
  */
-book::code widget::update_child(widget *w)
+log::code widget::update_child(widget *w)
 {
-    if(!w->_dirty_area_) return book::code::rejected;
+    if(!w->_dirty_area_) return log::code::rejected;
     return dirty(w->_dirty_area_);
 }
 
@@ -359,12 +359,12 @@ book::code widget::update_child(widget *w)
  *          Temporary function to render this widget on the screen console.
  * \return
  */
-book::code widget::render()
+log::code widget::render()
 {
     if(!(_uistate_ & ui::uistate::Visible))
     {
-        book::info() <<  id() << " is not visible.. - rendering request rejected" << book::eol;
-        return book::code::rejected;
+        log::info() <<  id() << " is not visible.. - rendering request rejected" << log::eol;
+        return log::code::rejected;
     }
 
     for(int y = 0; y < _geometry_.height(); y++)
@@ -375,14 +375,14 @@ book::code widget::render()
     }
     std::cout << std::flush;
 
-    return book::code::done;
+    return log::code::done;
 }
 
 
-book::code widget::position_child(widget* w)
+log::code widget::position_child(widget* w)
 {
     if(!w->_anchor_)
-        return book::code::rejected;
+        return log::code::rejected;
 
     auto off = ui::cxy{0,0};
     auto [a,b,wh] = _geometry_.tolocal().components();
@@ -424,14 +424,14 @@ book::code widget::position_child(widget* w)
 
     auto ank = w->_anchor_;
 
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
 
-book::code widget::setup_components()
+log::code widget::setup_components()
 {
-    book::status() << " called the base widget class. " << book::code::reimplement << " - is this a derived class ? :" << pretty_id() << book::eol;
-    return book::code::reimplement;
+    log::status() << " called the base widget class. " << log::code::reimplement << " - is this a derived class ? :" << pretty_id() << log::eol;
+    return log::code::reimplement;
 }
 
 
@@ -468,7 +468,7 @@ void widget::clear()
 {
     CHECK_BLOC
 
-    book::debug() << color::grey100 << class_name() << color::lightcyan3 << '[' << color::lightsteelblue3 <<  id() << color::lightcyan3 << ']' << _colors_() << " >>colors<< ;" << color::yellow << _geometry_.tolocal() << book::eol;
+    log::debug() << color::grey100 << class_name() << color::lightcyan3 << '[' << color::lightsteelblue3 <<  id() << color::lightcyan3 << ']' << _colors_() << " >>colors<< ;" << color::yellow << _geometry_.tolocal() << log::eol;
 
     if(is_window())
         std::fill(_bloc_->begin(), _bloc_->end(), terminal::vchar(_colors_));
@@ -488,16 +488,16 @@ void widget::clear()
  * @brief Updates the widget.
  * @return ok
  */
-book::code widget::update()
+log::code widget::update()
 {
     auto p = parent<widget>();
 
     // no dirty rect = this widget has nothing to update.
-    if(!_dirty_area_) return book::code::ok;
+    if(!_dirty_area_) return log::code::ok;
 
     if(p) return p->update_child(this);
 
-    return book::code::done;
+    return log::code::done;
 }
 
 
@@ -541,25 +541,25 @@ bool widget::has_class(ui::uiclass::Type b) { return _uiclass_ & b; }
  *
  * @note Just pretend for now. But using it for fitting children widgets:
  */
-book::code widget::anchor_widget(widget* w)
+log::code widget::anchor_widget(widget* w)
 {
     if(w->parent<widget>() != this)
     {
-        book::error() <<  " widget " << w->pretty_id() << " is not a child widget of " << pretty_id() << ". - Request rejected." << book::eol;
-        return book::code::rejected;
+        log::error() <<  " widget " << w->pretty_id() << " is not a child widget of " << pretty_id() << ". - Request rejected." << log::eol;
+        return log::code::rejected;
     }
     //...
     position_child(w);
     //...
 
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
 
-book::code widget::setup_ui()
+log::code widget::setup_ui()
 {
-    book::warning() <<  " widget " << pretty_id() << " has no manageable components in the base class. - " << book::fn::endl << book::code::reimplement  << book::eol;
-    return book::code::reimplement;
+    log::warning() <<  " widget " << pretty_id() << " has no manageable components in the base class. - " << log::fn::endl << log::code::reimplement  << log::eol;
+    return log::code::reimplement;
 }
 
 
@@ -581,10 +581,10 @@ void widget::set_uiclass(ui::uiclass::Type cls) { _uiclass_ = cls; }
  * \note As of Oct 2024, this method is not 100% usable. It is actually in development and experimentation.
  *       There is still a kind of bug regarding the local variable 'off' values relative to the rectangle::height value.
  */
-book::code widget::auto_fit()
+log::code widget::auto_fit()
 {
 
-    book::debug() <<  '\'' << color::yellow << id() << color::reset << "' anchor:" << std::format("{:<04X}", _anchor_) << book::eol;
+    log::debug() <<  '\'' << color::yellow << id() << color::reset << "' anchor:" << std::format("{:<04X}", _anchor_) << log::eol;
     cxy off{1,1};
 
     // need to separate and set simple access to the rectangle coordinates and its components:
@@ -604,34 +604,34 @@ book::code widget::auto_fit()
         if((par->has_frame()) && !(_anchor_ & anchor::Frame))
             off={1,1}; ///< Bug to be investigated, y should be '1' instead of '2'...
 
-    book::out() << id() << " offset:" << off << book::eol;
+    log::out() << id() << " offset:" << off << log::eol;
     //
-    book::debug() << "placement is within this area :" << color::yellow << area << color::reset << book::eol;
+    log::debug() << "placement is within this area :" << color::yellow << area << color::reset << log::eol;
 
     auto [a,b,sz] = area.components();
     auto [ea,eb,esz] = _geometry_.components(); // this 'e'lement's geometry components
 
     if(_anchor_ & anchor::Width)
     {
-        book::out() << " Resize this " << id() <<  " Geometry:" << color::blue4 << _geometry_ << book::eol;;
+        log::out() << " Resize this " << id() <<  " Geometry:" << color::blue4 << _geometry_ << log::eol;;
         resize(ui::size{sz.w - (off.x*2), *_geometry_.height()});
         _geometry_.moveat({off.x,_geometry_.a.y});
-        book::out() << "fit width: " << color::yellow << id() << color::reset <<"::_geometry_: " << color::hotpink4 << _geometry_ << color::reset << book::eol;
+        log::out() << "fit width: " << color::yellow << id() << color::reset <<"::_geometry_: " << color::hotpink4 << _geometry_ << color::reset << log::eol;
     }
     else
     {
         if(_anchor_ & anchor::Right)
         {
-            book::out() << color::yellow << id() << color::reset << " fit right:" << book::eol;
+            log::out() << color::yellow << id() << color::reset << " fit right:" << log::eol;
             _geometry_.moveat(cxy{sz.w - (esz.w-1 + off.x), eb.y});
-            book::out() << _geometry_;
+            log::out() << _geometry_;
         }
         else
             if(_anchor_ & anchor::Left)
             {
-                book::out() << color::yellow << id() << color::reset << " fit right:" << book::eol;
+                log::out() << color::yellow << id() << color::reset << " fit right:" << log::eol;
                 _geometry_.moveat(cxy{0, eb.y});
-                book::out() << _geometry_ << book::eol;
+                log::out() << _geometry_ << log::eol;
             }
         // else center....
     }
@@ -639,7 +639,7 @@ book::code widget::auto_fit()
     if(_anchor_ & anchor::Height)
     {
         resize(ui::size{_geometry_.dwh.w,*area.height()});
-        book::out() << "fit height: " << color::yellow << id() << color::reset <<"::_geometry_: " << color::hotpink4 << _geometry_ << color::reset << book::eol;
+        log::out() << "fit height: " << color::yellow << id() << color::reset <<"::_geometry_: " << color::hotpink4 << _geometry_ << color::reset << log::eol;
         _geometry_.moveat({a.x, off.y});
     }
     else
@@ -648,20 +648,20 @@ book::code widget::auto_fit()
         {
 
             _geometry_.moveat({_geometry_.a.x, *area.height()-off.y});
-            book::out() << "fit bottom: " << color::yellow << id() << color::reset <<"::_geometry_: " << color::hotpink4 << _geometry_ << color::reset << book::eol;
+            log::out() << "fit bottom: " << color::yellow << id() << color::reset <<"::_geometry_: " << color::hotpink4 << _geometry_ << color::reset << log::eol;
         }
         else
         if(_anchor_ & anchor::Top)
         {
             _geometry_.moveat({_geometry_.a.x, 0/*off.y*/});
-            book::out() << "fit bottom: " << color::yellow << id() << color::reset <<"::_geometry_: " << color::hotpink4 << _geometry_ << color::reset << book::eol;
+            log::out() << "fit bottom: " << color::yellow << id() << color::reset <<"::_geometry_: " << color::hotpink4 << _geometry_ << color::reset << log::eol;
         }
     }
-    book::out() << "applied geometry : " << color::yellow << id() << ' '  << color::lime << _geometry_ << color::yellow << book::eol;
+    log::out() << "applied geometry : " << color::yellow << id() << ' '  << color::lime << _geometry_ << color::yellow << log::eol;
 
     //...
 
-    return book::code::done;
+    return log::code::done;
 }
 
 
@@ -672,17 +672,17 @@ book::code widget::auto_fit()
  * \return done.
  * \note As of Oct. 2024, there is no size checking! tuxvision is in early dev/experiments/learning and R&D.
  */
-book::code widget::resize(size new_sz)
+log::code widget::resize(size new_sz)
 {
     CHECK_BLOC
     _geometry_.resize(new_sz);
-    book::info() <<  "new geometry: " << color::yellow << _geometry_ << book::eol;
+    log::info() <<  "new geometry: " << color::yellow << _geometry_ << log::eol;
     if(is_window())
     {
         _bloc_->resize(new_sz.area(), terminal::vchar(_colors_));
-        book::out() << " bloc reallocation done." << book::eol;
+        log::out() << " bloc reallocation done." << log::eol;
     }
-    return book::code::done;
+    return log::code::done;
 }
 
 
@@ -694,32 +694,32 @@ book::code widget::resize(size new_sz)
  * \return rejected or accepted.
  * @note Provide independent iterator to multiple drawing at once ...
  */
-book::code widget::draw_frame(const rectangle &r)
+log::code widget::draw_frame(const rectangle &r)
 {
     auto area  = r;
     if(!r)
         area = _geometry_.tolocal();
 
-    book::debug() <<  " area: " << color::yellow << area << book::eol;
+    log::debug() <<  " area: " << color::yellow << area << log::eol;
     auto pos= _iterator_; // dummy assign.
     auto p = begin_draw(area);
-    book::out() << pretty_id() << " les quattre coins :" << book::eol;
+    log::out() << pretty_id() << " les quattre coins :" << log::eol;
     p.home() << cadre::TopLeft
              << area.top_right() << cadre::TopRight
              << area.bottom_right() << cadre::BottomRight
              << area.bottom_left() << cadre::BottomLeft;
 
-    book::out() << pretty_id() << " les hosizontaux :" << book::eol;
+    log::out() << pretty_id() << " les hosizontaux :" << log::eol;
     pos = at(ui::cxy{1,0}); // Real assign from here.
     std::fill(pos, pos + area.dwh.w-2, terminal::vchar(_colors_) << cadre::Horizontal);
     pos = at(ui::cxy{1,area.b.y});
     std::fill(pos, pos + area.dwh.w-2, terminal::vchar(_colors_) << cadre::Horizontal);
 
-    book::out() << pretty_id() << " la verticalité :" << book::eol;
+    log::out() << pretty_id() << " la verticalité :" << log::eol;
     for(int y=1; y < area.dwh.h-1; y++)
         p << ui::cxy{0,y} << cadre::Vertical << ui::cxy{area.b.x,y} << cadre::Vertical;
 
-    return book::code::done;
+    return log::code::done;
 }
 
 

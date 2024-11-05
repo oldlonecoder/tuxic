@@ -17,26 +17,26 @@ label::~label()
     _text_.clear();
 }
 
-book::code label::draw()
+log::code label::draw()
 {
 
-    //book::debug() << book::fn::fun << "[" << color::hotpink4 << id() << color::reset << "]" << "geometry: " << color::lime << _geometry_ << color::reset << book::fn::endl;
+    //log::debug() << log::fn::fun << "[" << color::hotpink4 << id() << color::reset << "]" << "geometry: " << color::lime << _geometry_ << color::reset << log::fn::endl;
     clear();
     auto p = begin_draw();
     p.home();
     p << _text_;
     end_draw(p);
 
-    return book::code::done;
+    return log::code::done;
 }
 
 
 
-book::code label::set_text(const std::string& _txt)
+log::code label::set_text(const std::string& _txt)
 {
-    book::log() << pretty_id() << book::eol;
+    log::log() << pretty_id() << log::eol;
     _text_ = _txt;
-    book::out() << " text set to '" << _text_ << "';" << book::eol;
+    log::out() << " text set to '" << _text_ << "';" << log::eol;
     dirty(_geometry_.tolocal());
 
     if(_justify_ & ui::justify::auto_size)
@@ -44,18 +44,18 @@ book::code label::set_text(const std::string& _txt)
 
     ///@ Todo Apply (re-)size policies...
 
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
 
-book::code label::set_justify(ui::justify::Type j)
+log::code label::set_justify(ui::justify::Type j)
 {
     _justify_ |= j;
     if(j&ui::justify::auto_size)
         return set_geometry(ui::rectangle{_geometry_.a.x,_geometry_.a.y, static_cast<int>(_text_.length()),_geometry_.dwh.h});
     // Handle the rest of justification flags that can be supported by labels...
     //...
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
 

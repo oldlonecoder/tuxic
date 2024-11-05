@@ -25,11 +25,11 @@
 namespace tux
 {
 
-class TUXIC_LEXER lexer
+class TUXIC_FRM lexer
 {
 public:
 
-    struct TUXIC_LEXER config_data
+    struct TUXIC_FRM config_data
     {
         std::string_view text{};
         token_table*      production{nullptr};

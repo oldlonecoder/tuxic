@@ -94,7 +94,7 @@ Because OpenBSD does not implement STREAMS, there is no distinction between some
 
 
 
-#include "tuxvision/ui/events.h"
+#include "tuxic/ui/events.h"
 #include <sys/select.h>
 #include <sys/ioctl.h>
 
@@ -260,9 +260,9 @@ event::operator bool()
 
 
 
-book::code event::get_stdin_event(event &_event_, timeval tv)
+log::code event::get_stdin_event(event &_event_, timeval tv)
 {
-    book::log() << "Enter:" << book::eol;
+    log::log() << "Enter:" << log::eol;
 
     fd_set fds;
     FD_ZERO(&fds);                                          // NOLINT
@@ -271,40 +271,40 @@ book::code event::get_stdin_event(event &_event_, timeval tv)
 
     if(auto e = FD_ISSET(STDIN_FILENO, &fds); !e)
     {
-        book::out() << "TIMEOUT" << book::eol;
+        log::out() << "TIMEOUT" << log::eol;
         _event_.event_type = event::type::noop;
-        return book::code::timeout;
+        return log::code::timeout;
     }
     int pksize{0};
     ioctl(0,FIONREAD,&pksize);
     if(!pksize)
     {
-        book::out() << color::reset << "stdin triggered with 0 bytes ( likely terminal resize event )..." << book::eol;
-        return book::code::empty;
+        log::out() << color::reset << "stdin triggered with 0 bytes ( likely terminal resize event )..." << log::eol;
+        return log::code::empty;
     }
-    //book::out() << " STD INPUT EVENT  : " << color::yellow << pksize << color::reset << " bytes";
+    //log::out() << " STD INPUT EVENT  : " << color::yellow << pksize << color::reset << " bytes";
     char buffer[100];
 
     size_t r = ::read(STDIN_FILENO, buffer, 100);
     buffer[r] = 0;
-    //book::out() << "{" << color::yellow << tuxin::string::bytes(buffer) << color::reset << "}";
+    //log::out() << "{" << color::yellow << tuxin::string::bytes(buffer) << color::reset << "}";
 
     ansi_parser cparser;
     _event_.event_type = cparser.parse(_event_, buffer);
 
     if(_event_.event_type == event::type::DROP)
-        return book::code::rejected;
+        return log::code::rejected;
 
     //if(_event_.event_type == event::type::MOUSE)
-    //    book::out() << event::mouse_data.to_string() << color::reset;
+    //    log::out() << event::mouse_data.to_string() << color::reset;
 
     else if(_event_.event_type == event::type::key_command)
     {
-        book::out() << "KEY COMMAND: {" << color::lime << _event_.data.kev.description << color::reset << '}' << book::eol;
+        log::out() << "KEY COMMAND: {" << color::lime << _event_.data.kev.description << color::reset << '}' << log::eol;
         if(_event_.data.kev.mnemonic == key_event::ESC)
-            return book::code::cancel;
+            return log::code::cancel;
     }
-    return book::code::accepted;
+    return log::code::accepted;
 }
 
 
@@ -318,14 +318,14 @@ void shutdown_listeners(){}
 
 /*!
  * \brief event::init
- * \return [book::code::]done when finished or throws book::exception if errors during the execution of init.
+ * \return [log::code::]done when finished or throws log::exception if errors during the execution of init.
  */
-book::code event::init()
+log::code event::init()
 {
-    book::message() << " As os nov. 2024, there is nothing to init yet..." << book::eol;
+    log::message() << " As os nov. 2024, there is nothing to init yet..." << log::eol;
     //...
 
-    return book::code::reimplement;
+    return log::code::reimplement;
 }
 
 
@@ -345,9 +345,9 @@ event::ansi_parser::~ansi_parser()
 
 event::type event::ansi_parser::parse(event &_ev_, const char *a_seq_)
 {
-    //book::log() << book::fn::fun;
+    //log::log() << log::fn::fun;
     _seq_ = a_seq_; ///@todo handle MSVC craps that forbid "const char*" to be used to construct their string_view !!!
-    //book::debug() << book::fn::fun << "{" << color::yellow << tuxin::string::bytes(_seq_) << color::reset << "}:";
+    //log::debug() << log::fn::fun << "{" << color::yellow << tuxin::string::bytes(_seq_) << color::reset << "}:";
     it = _seq_.begin();
 
     // L'on s'occupe des CSI (Control Sequence Introducer) avant tout:
@@ -356,7 +356,7 @@ event::type event::ansi_parser::parse(event &_ev_, const char *a_seq_)
     {
         // systematic/explicitely ESC pressed:
         _ev_.data.kev = key_event::query(27l);
-        book::out() << _ev_.data.kev.description << book::eol;
+        log::out() << _ev_.data.kev.description << log::eol;
         _ev_.event_type = event::type::key_command;
         return _ev_.event_type;
     }
@@ -370,7 +370,7 @@ event::type event::ansi_parser::parse(event &_ev_, const char *a_seq_)
     {
 
         _ev_.event_type = event::type::key_command;
-        book::out() << "KEY_COMMAND: " << color::yellow << (int)*it << color::reset << "';" << book::eol;
+        log::out() << "KEY_COMMAND: " << color::yellow << (int)*it << color::reset << "';" << log::eol;
         if(key_event tmpkev = key_event::query(*it); tmpkev.mnemonic != key_event::None)
         {
             _ev_.data.kev=tmpkev;
@@ -380,7 +380,7 @@ event::type event::ansi_parser::parse(event &_ev_, const char *a_seq_)
         return _ev_.event_type;
     }
     // -- key input.
-    book::out() << "CHARACTER:'" << color::yellow << *it << color::reset << "';"  << book::eol;
+    log::out() << "CHARACTER:'" << color::yellow << *it << color::reset << "';"  << log::eol;
     _ev_.data.kev = key_event::nokey;
     _ev_.event_type = event::type::CHARACTER; // Extra bytes are all ignored.
     _ev_.data.kev.code = *it;
@@ -390,7 +390,7 @@ event::type event::ansi_parser::parse(event &_ev_, const char *a_seq_)
 
 event::type event::ansi_parser::parse_esc(event& evd)
 {
-    //book::log() << book::fn::fun;
+    //log::log() << log::fn::fun;
 
     if (!next_byte()) return event::type::UNCOMPLETED;
     switch (*it)
@@ -426,14 +426,14 @@ event::type event::ansi_parser::parse_ss_1_2(event &evd)
         // 8 bytes max which include the beginning of the buffer (ESC;O | [)
 
     // Consume the buffer. key_event::ansi_seq is now the final location.
-    //book::debug() << book::fn::fun;
-    //book::out() << "copy seq into event kev ansi_seq: ";
+    //log::debug() << log::fn::fun;
+    //log::out() << "copy seq into event kev ansi_seq: ";
     std::strncpy(evd.data.kev.ansi_seq, _seq_.data(), 19);
 
     auto& code = evd.data.kev.code;
     code = 0;
     auto ln = std::min(size_t(8),std::strlen(evd.data.kev.ansi_seq));
-    //book::out() << " Check: ansi_seq to parse: {" << color::yellow << tuxin::string::bytes(evd.data.kev.ansi_seq) << color::reset << "}:";
+    //log::out() << " Check: ansi_seq to parse: {" << color::yellow << tuxin::string::bytes(evd.data.kev.ansi_seq) << color::reset << "}:";
 
     U8 _b_ = evd.data.kev.ansi_seq[0]; // start with ESC byte
     code = (code << 8) | _b_;
@@ -444,10 +444,10 @@ event::type event::ansi_parser::parse_ss_1_2(event &evd)
     {
         _b_ = evd.data.kev.ansi_seq[x];
         code = (code << 8) | _b_;
-        book::out() << std::format("{:04x}",code) << book::eol;
+        log::out() << std::format("{:04x}",code) << log::eol;
         if(key_event tmp_kev = key_event::query(code); tmp_kev.mnemonic != key_event::None)
         {
-            book::out() << "Match:" << color::lime << tmp_kev.description << book::eol;
+            log::out() << "Match:" << color::lime << tmp_kev.description << log::eol;
             evd.data.kev = tmp_kev;
             evd.event_type = event::type::key_command;
             return evd.event_type;
@@ -466,32 +466,32 @@ event::type event::ansi_parser::parse_dcs()
 event::type event::ansi_parser::parse_csi(event& evd)
 {
 
-    //book::debug() << book::fn::fun;
+    //log::debug() << log::fn::fun;
 
     bool altered = false;
     int argument = 0;
     std::vector<int> arguments;
     while (true) {
         if (!next_byte()) {
-            //book::out() << " End of the sequence ";
+            //log::out() << " End of the sequence ";
             return event::type::UNCOMPLETED;
         }
 
         if (*it == '<') {
-            //book::out() << " altered mode";
+            //log::out() << " altered mode";
             altered = true; // Just bypass ...for now...
             continue;
         }
 
         if (*it >= '0' && *it <= '9') {
-            //book::out() << "cursor on digit: '" << color::yellow << (*it-'0') << color::reset << "'";
+            //log::out() << "cursor on digit: '" << color::yellow << (*it-'0') << color::reset << "'";
             argument *= 10;  // NOLINT
             argument += *it - '0';
             continue;
         }
 
         if (*it == ';') {
-            //book::out() << "arg separator: arg value: '" << color::yellow << argument << color::reset << "' ";
+            //log::out() << "arg separator: arg value: '" << color::yellow << argument << color::reset << "' ";
             arguments.push_back(argument);
             argument = 0;
             continue;
@@ -503,11 +503,11 @@ event::type event::ansi_parser::parse_csi(event& evd)
         // To handle F1-F4, we exclude '['.
         if (*it >= '@' && *it <= '~' && *it != '<' && *it != '[')
         {
-            //book::out() << "CSI completed: last arg : '" << color::yellow << argument << color::reset << "' ";
+            //log::out() << "CSI completed: last arg : '" << color::yellow << argument << color::reset << "' ";
             arguments.push_back(argument);
             argument = 0;  // NOLINT
             int c=1;
-            //for(auto n : arguments) book::out() << c++ << " > " << std::format("0x{:02x}",n);
+            //for(auto n : arguments) log::out() << c++ << " > " << std::format("0x{:02x}",n);
             switch (*it) {
                 case 'M':
                     return parse_mouse(evd,altered, true, std::move(arguments));
@@ -516,11 +516,11 @@ event::type event::ansi_parser::parse_csi(event& evd)
                 case 'R':
                     return parse_caret_report(std::move(arguments));
                 default:
-                    book::out() << " Switching to parse_ss_1_2():";
+                    log::out() << " Switching to parse_ss_1_2():";
                     return parse_ss_1_2(evd);
             }
         }
-        book::out() << " Unterminated CSI: switchting to parse_ss_1_2" << book::eol;
+        log::out() << " Unterminated CSI: switchting to parse_ss_1_2" << log::eol;
         return parse_ss_1_2(evd);
 
         // // Invalid ESC in CSI.
@@ -534,7 +534,7 @@ event::type event::ansi_parser::parse_csi(event& evd)
 event::type event::ansi_parser::parse_osc(event& ev)
 {
     tux::string str = tux::string::bytes(_seq_);
-    book::debug() << book::fn::func << "rec seq: {" << color::yellow << str << color::reset << "} - not implemented yet" << book::eol;
+    log::debug() << log::fn::func << "rec seq: {" << color::yellow << str << color::reset << "} - not implemented yet" << log::eol;
     return event::type::DROP;
 }
 
@@ -570,7 +570,7 @@ event::type event::ansi_parser::parse_mouse(event& evnt, bool /*altered - not us
     event::mouse_data.meta      = arguments[0] & 8;
     event::mouse_data.control   = arguments[0] & 0x10;
     if(event::mouse_data.meta)
-        book::info() << book::fn::func << color::pair({.fg=color::grey100, .bg=color::red4}) << "meta" << book::eol;
+        log::info() << log::fn::func << color::pair({.fg=color::grey100, .bg=color::red4}) << "meta" << log::eol;
     // Subtract 1 from the coords. Because the terminal starts at 1,1 and our ui system starts 0,0
     event::mouse_data.xy.x = arguments[1]-1;
     event::mouse_data.xy.y = arguments[2]-1;

@@ -22,7 +22,7 @@ namespace tux::cmd
 {
 
 
-struct TUXIC_TOOLS cmd_switch
+struct TUXIC_FRM cmd_switch
 {
     using data = std::vector<std::string_view>;
     using array = std::vector<cmd_switch*>;
@@ -55,7 +55,7 @@ struct TUXIC_TOOLS cmd_switch
 };
 
 
-class TUXIC_TOOLS line
+class TUXIC_FRM line
 {
 
     cmd_switch::array arguments;

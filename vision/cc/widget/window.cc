@@ -39,10 +39,10 @@ window::window(object *_parent, const std::string &_id, ui::components::type _co
 window::~window()
 = default;
 
-book::code window::hide()
+log::code window::hide()
 {
     //_desktop_->hide_window(this);
-    return book::code::notimplemented;
+    return log::code::notimplemented;
 }
 
 
@@ -50,26 +50,26 @@ book::code window::hide()
  * @brief Show on the screen.
  * @return done;
  */
-book::code window::show()
+log::code window::show()
 {
-    //if(!_screen_) return book::code::rejected;
+    //if(!_screen_) return log::code::rejected;
     //...
     //_screen_->add_window(this);
     _uistate_ |= ui::uistate::Visible;
     render();
-    return book::code::done;
+    return log::code::done;
 }
 
 
-book::code window::setup_ui()
+log::code window::setup_ui()
 {
     if(_uicomponents_ == ui::components::StatusBar)
     {
-        book::log() << book::fn::func << pretty_id() << " Adding StatusBar component:" << book::eol;
+        log::log() << log::fn::func << pretty_id() << " Adding StatusBar component:" << log::eol;
         _status_bar_ = new status_bar(this,id() + "_status_bar");
         anchor_widget(_status_bar_);
     }
-    return book::code::done;
+    return log::code::done;
 }
 
 
@@ -78,14 +78,14 @@ book::code window::setup_ui()
  * @param _dirty_rect
  * @return
  */
-book::code window::dirty(const rectangle& _dirty_rect)
+log::code window::dirty(const rectangle& _dirty_rect)
 {
     auto r = widget::dirty(_dirty_rect);
     if(!r)
-        return book::code::rejected;
+        return log::code::rejected;
     if(_desktop_)
         return _desktop_->dirty(_dirty_area_);
-    return book::code::null_ptr;
+    return log::code::null_ptr;
 
 }
 

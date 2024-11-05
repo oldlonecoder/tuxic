@@ -18,7 +18,7 @@ namespace tux::ui
 {
 
 
-struct TUXIC_TOOLS cxy {
+struct TUXIC_FRM cxy {
 
     int x = -1;
     int y = -1;
@@ -60,7 +60,7 @@ struct TUXIC_TOOLS cxy {
 };
 
 
-struct TUXIC_TOOLS size {
+struct TUXIC_FRM size {
     int w{0};
     int h{0};
      
@@ -102,7 +102,7 @@ struct TUXIC_TOOLS size {
         else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(w           );
         else if constexpr (std::is_same_v<T, i64>)          return static_cast<u64>(w           );
         else if constexpr (std::is_same_v<T, std::string>)  return std::to_string(w             );
-        //book::error() << book::code::expected << " compatible left-value type";
+        //log::error() << log::code::expected << " compatible left-value type";
         return {};
     }
     template<typename T=int> std::optional<T> height() const
@@ -125,7 +125,7 @@ struct TUXIC_TOOLS size {
         else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(h);
         else if constexpr (std::is_same_v<T, i64>)          return static_cast<u64>(h);
         else if constexpr (std::is_same_v<T, std::string>)  return std::to_string(h);
-        //book::error() << book::code::expected << " compatible left-value type";
+        //log::error() << log::code::expected << " compatible left-value type";
         return {};
     }
 };
@@ -141,7 +141,7 @@ struct TUXIC_TOOLS size {
  * @author oldlonecoder (lussier.serge@gmail.com)
  *
  */
-struct TUXIC_TOOLS rectangle {
+struct TUXIC_FRM rectangle {
 
     cxy a{0, 0};
     cxy b{0, 0};
@@ -205,7 +205,7 @@ struct TUXIC_TOOLS rectangle {
         else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(dwh.w           );
         else if constexpr (std::is_same_v<T, i64>)          return static_cast<u64>(dwh.w           );
         else if constexpr (std::is_same_v<T, std::string>)  return std::to_string(dwh.w             );
-        //book::error() << book::code::expected << " compatible left-value type";
+        //log::error() << log::code::expected << " compatible left-value type";
         return {};
     }
     template<typename T=int> std::optional<T> height() const
@@ -228,7 +228,7 @@ struct TUXIC_TOOLS rectangle {
         else if constexpr (std::is_same_v<T, u32>)          return static_cast<u32>(dwh.h);
         else if constexpr (std::is_same_v<T, i64>)          return static_cast<u64>(dwh.h);
         else if constexpr (std::is_same_v<T, std::string>)  return std::to_string(dwh.h);
-        //book::error() << book::code::expected << " compatible left-value type";
+        //log::error() << log::code::expected << " compatible left-value type";
         return {};
     }
 
@@ -268,7 +268,7 @@ struct TUXIC_TOOLS rectangle {
 };
 
 
-struct TUXIC_TOOLS string2d
+struct TUXIC_FRM string2d
 {
     tux::string win{};
     rectangle r;

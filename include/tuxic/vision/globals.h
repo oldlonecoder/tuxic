@@ -24,8 +24,8 @@
 #include <map>
 //#include <vector>
 #include <string_view>
-#include <tuxvision/tools/string.h>
-
+#include <tuxic/tools/string.h>
+#include
 
 using namespace integers;
 
@@ -154,7 +154,7 @@ namespace colors
  * \brief The attr_db class
  * Database set of the colors. Theme, components, then state
  */
-struct attr_db
+struct TUXIC_FRM attr_db
 {
     using components = std::map<uistate::Type,   color::pair>;
     using elements = std::map<std::string_view, attr_db::components>;

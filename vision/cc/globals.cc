@@ -1,9 +1,9 @@
 
 
-//#include "tuxvision/tools/colors.h"
+//#include "tuxic/tools/colors.h"
 #include <sys/epoll.h>
 #include <unistd.h>
-#include "tuxvision/ui/globals.h"
+#include "tuxic/ui/globals.h"
 
 namespace tux::ui::colors
 {

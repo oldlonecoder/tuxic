@@ -21,7 +21,7 @@
 namespace tux
 {
 
-struct TUXIC_TOOLS glyph
+struct TUXIC_FRM glyph
 {
 
     using T = const char*;
@@ -369,7 +369,7 @@ For anyone interested, here'Code the fixed version (I hope you don't mind, I'll 
 
 
 
-struct TUXIC_TOOLS accent_fr
+struct TUXIC_FRM accent_fr
 {
     using T = const char*;
 

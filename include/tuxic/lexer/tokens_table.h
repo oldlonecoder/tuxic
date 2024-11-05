@@ -20,7 +20,7 @@
 namespace tux
 {
 
-class TUXIC_LEXER  token_table
+class TUXIC_FRM  token_table
 {
     
 protected:

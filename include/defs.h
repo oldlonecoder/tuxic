@@ -30,9 +30,9 @@
 #   define _SCL_SECURE_NO_WARNINGS
 #   define NOMINMAX
 #   ifdef REM_EXPORTS
-#       define TUXIC_LEXER __declspec(dllexport)
+#       define TUXIC_FRM __declspec(dllexport)
 #   else
-#       define TUXIC_LEXER __declspec(dllimport)
+#       define TUXIC_FRM __declspec(dllimport)
 #   endif
 
 #   include <Windows.H> // Must be included before anything else
@@ -42,7 +42,7 @@
 
 #   define __PRETTY_FUNCTION__ __FUNCSIG__
 #else
-#       define TUXIC_LEXER
+#       define TUXIC_FRM
 #endif
 
 //---------------------------------------------

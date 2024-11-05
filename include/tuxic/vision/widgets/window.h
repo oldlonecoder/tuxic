@@ -25,7 +25,7 @@ namespace tux::ui
  * \brief Public window class.
  *      Toplevel widget
  */
-class _TUXVISION_ window : public widget
+class TUXIC_FRM window : public widget
 {
     CLASSNAME(window)
     terminal::desktop* _desktop_{nullptr}; ///< Pointer to the 'desktop' window.
@@ -38,16 +38,16 @@ public:
 
     window(object* _parent, const std::string& _id, ui::components::type _components);
 
-    book::code hide() override;
-    book::code show() override;
-    book::code setup_ui() override;
+    log::code hide() override;
+    log::code show() override;
+    log::code setup_ui() override;
 
     status_bar* statusbar(){ return _status_bar_; }
 
 
     //...
 protected:
-    book::code dirty(const rectangle& _dirty_rect) override;
+    log::code dirty(const rectangle& _dirty_rect) override;
 
 private:
     int _tli_{-1}; ///< current index number on the screen windows (z-order) stack. Refreshed on every screen's windows stack operations.

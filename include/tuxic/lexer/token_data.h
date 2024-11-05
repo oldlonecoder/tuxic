@@ -22,7 +22,7 @@
 
 namespace tux
 {
-struct TUXIC_LEXER lex_token
+struct TUXIC_FRM lex_token
 {
     using list      = std::vector<lex_token>;
     using iterator  = lex_token::list::iterator;
@@ -42,7 +42,7 @@ struct TUXIC_LEXER lex_token
     void                         numeric_tr();
     // ------------------------------------------------
 
-    struct TUXIC_LEXER location_data
+    struct TUXIC_FRM location_data
     {
         [[maybe_unused]] size_t                    line{0};
         [[maybe_unused]] size_t                    column{0};
@@ -56,7 +56,7 @@ struct TUXIC_LEXER lex_token
     } token_location;
 
 
-    struct TUXIC_LEXER token_flags
+    struct TUXIC_FRM token_flags
     {
         uint8_t V: 1; // This token is a usable value into expression.
         uint8_t S: 1; // Post semantic parser: Left-Assignable Object

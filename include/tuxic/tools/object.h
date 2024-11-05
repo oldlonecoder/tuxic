@@ -17,7 +17,7 @@
 namespace tux
 {
 
-class  TUXIC_TOOLS object
+class  TUXIC_FRM object
 {
     CLASSNAME_START(object)
 protected:
@@ -42,7 +42,7 @@ public:
     object::iterator get_child_iterator(object* obj);
     [[maybe_unused]] object::iterator get_child_iteratorby_id(const std::string& aid);
 
-    //Book::Enums::Code detach();
+    //log::Enums::Code detach();
     log::code detach(object* obj_ptr=nullptr);
     // -- All does the same, ...as a different name lol!
 

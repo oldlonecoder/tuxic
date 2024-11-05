@@ -25,7 +25,7 @@ using namespace std::literals;
 namespace tux
 {
 
-class TUXIC_TOOLS sscan
+class TUXIC_FRM sscan
 {
     const char* m_end{nullptr};
     const char* m_pos{nullptr};
@@ -36,7 +36,7 @@ public:
 
     using iterator = const char*;
 
-    struct TUXIC_TOOLS  [[maybe_unused]] context
+    struct TUXIC_FRM  [[maybe_unused]] context
     {
         sscan::iterator m_pos{nullptr};
         sscan::iterator m_begin{nullptr};
@@ -44,13 +44,13 @@ public:
         //...
     };
 
-    struct TUXIC_TOOLS numeric
+    struct TUXIC_FRM numeric
     {
         private:
         static sscan empty;
         public:
 
-        struct TUXIC_TOOLS details
+        struct TUXIC_FRM details
         {
             std::string_view seq;
             enum class base_size : char
@@ -115,7 +115,7 @@ public:
     };
 
 public:
-    struct TUXIC_TOOLS location_data
+    struct TUXIC_FRM location_data
     {
         // { \n; \n\r; \r\n; \r }
         std::size_t line{0};

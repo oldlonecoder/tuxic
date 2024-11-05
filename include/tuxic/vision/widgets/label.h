@@ -33,9 +33,9 @@ public:
     label()=default;
     ~label() override;
     label(object* _parent_widget, const std::string _id);
-    book::code set_text(const std::string& _txt);
-    book::code set_justify(ui::justify::Type j);
-    book::code draw() override;
+    log::code set_text(const std::string& _txt);
+    log::code set_justify(ui::justify::Type j);
+    log::code draw() override;
 
 };
 }

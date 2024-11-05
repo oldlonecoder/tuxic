@@ -63,7 +63,7 @@ std::string vchar::get_utf_string() const
         case Frame:
             return cadre()[frame_id()];
         default: break;
-            //throw book::exception() [book::fatal() << " Memory corruption error into vchar data!"];
+            //throw log::exception() [log::fatal() << " Memory corruption error into vchar data!"];
         }
     }
     std::string s;
@@ -85,11 +85,11 @@ color::code vchar::background() const { return static_cast<color::code>((d & BGM
 [[maybe_unused]] glyph::type vchar::icon_id() const
 {
     if (!(d & UGlyph))
-        throw book::exception() [ book::except() << book::code::rejected << "attempt to use this vchar cell as a glyph which is not,"];
+        throw log::exception() [ log::except() << log::code::rejected << "attempt to use this vchar cell as a glyph which is not,"];
 
     auto Ic = d & CharMask;
     if (Ic > glyph::log)
-        throw book::exception()[book::except() << book::fn::func << book::code::oob << ':' << Ic];
+        throw log::exception()[log::except() << log::fn::func << log::code::oob << ':' << Ic];
     return  Ic;
 }
 
@@ -98,7 +98,7 @@ color::code vchar::background() const { return static_cast<color::code>((d & BGM
 {
     auto AID = d & CharMask;
     if (AID > accent_fr::Ucirc)
-        throw book::exception()[book::fatal() << book::fn::func << book::code::oob << ':' << AID];
+        throw log::exception()[log::fatal() << log::fn::func << log::code::oob << ':' << AID];
 
     return static_cast<accent_fr::type>(AID);
 }
@@ -110,7 +110,7 @@ cadre::index vchar::frame_id() const
 {
     auto c = d & 0xff;
     if(c > 11)
-        throw book::exception() [book::except() << book::code::oob << book::fn::func << " invalid frame index: " << color::red4 << c];
+        throw log::exception() [log::except() << log::code::oob << log::fn::func << " invalid frame index: " << color::red4 << c];
 
     return static_cast<cadre::index>(d & 0xFF);
 }
@@ -180,12 +180,12 @@ std::string vchar::render(const vchar* _blk, int _width)
     return _o;
 }
 
-book::code vchar::render_string(vchar::string::iterator start, vchar::string::iterator end)
+log::code vchar::render_string(vchar::string::iterator start, vchar::string::iterator end)
 {
     std::string str;
     auto it = start;
     str = start->colors()();
-    //book::log() << color::lightsteelblue3 <<" ::render_string: " << start->details();
+    //log::log() << color::lightsteelblue3 <<" ::render_string: " << start->details();
     color::pair curcolors = it->colors();
     while(it != end)
     {
@@ -216,7 +216,7 @@ book::code vchar::render_string(vchar::string::iterator start, vchar::string::it
             str += (it++)->ascii();
     }
     std::cout << str <<  _eol_;
-    return book::code::done;
+    return log::code::done;
 }
 
 

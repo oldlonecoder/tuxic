@@ -10,7 +10,7 @@ message("Current SourceDir:" ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 add_library("tuxic.${Target}" SHARED
-            include/${FRAMEWORK}/${Target}/defs.h
+            include/${FRAMEWORK}/
 
 )
 
@@ -35,6 +35,12 @@ target_link_libraries("tuxic.${Target}" ${CMAKE_DL_LIBS} tuxic.tools tuxic.lexer
 
 
 
+install(TARGETS ${FRAMEWORK}.${Target}
+        EXPORT "${FRAMEWORK}.${Target}"
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include)
 
 
 

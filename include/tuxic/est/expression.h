@@ -1,5 +1,9 @@
-//#ifndef TUX_STRING_H
-//#define TUX_STRING_H
+//
+// Created by oldlonecoder on 8/19/24.
+//
+
+//#ifndef EXPRESSION_H
+//#define EXPRESSION_H
 /***************************************************************************
  *   Copyright (C) 1965/1987/2023 by Serge Lussier                         *
  *   serge.lussier@oldlonecoder.club                                       *
@@ -14,42 +18,36 @@
 
 
 #pragma once
-#include <tuxvision/ui/widget/window.h>
+
+#include <tuxic/lexer/lexer.h>
+#include "tuxic/est/bloc.h"
 
 
-namespace tux::ui::terminal
+namespace tux::est 
 {
-/*!
- * @brief screen's double back-buffer to be studied...
- */
-class TUXIC_FRM desktop : public widget
+
+class TUXIC_FRM expr : public bloc
 {
-    CLASSNAME(desktop)
+    lexer       _lexer_;
+    token_table _token_table_;
+    
+    std::string_view _src_{};
 
-    terminal::vchar::back_buffer _screen_buffer_{nullptr};
-
-    std::vector<rectangle> _dirty_stack_{};
-    std::list<window*> _windows_{};
-
-
-    static desktop* the_screen;
-    void refresh_zorder();
-    void render_dirty(const ui::rectangle& rect);
-
-    terminal::vchar::string::iterator peek_sb(ui::cxy xy);
 public:
-    desktop();
-    explicit desktop(const std::string& _id);
-    ~desktop() override;
+    expr(const std::string& _id_);
+    ~expr() override;
 
+    expr& operator=(std::string_view expr_text);
 
-    log::code update() override;
-protected:
-    friend class tux::ui::window;
-    friend class tux::ui::widget;
-
-    log::code dirty(const rectangle& _dirty_rect) override;
+    alu exec(std::string_view _text_="");
+    log::code clear();
+private:
+    log::code compile();
+    log::code lex();
+    node* make_node(lex_token* a_token);
 
 };
 
-}
+} // est
+
+//#endif //EXPRESSION_H
