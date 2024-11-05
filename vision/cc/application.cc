@@ -84,6 +84,27 @@ application& application::app()
     return *application::_app_;
 }
 
+
+std::string application::app_name() const
+{
+    tux::string text{};
+    auto [gh,colors] = log::return_code_attributes(log::code::object_ptr);
+    text
+        | colors()
+        | gh
+        | " tux::ui::application"
+        | color::reset | "::";
+    auto [gl, cc] = log::return_code_attributes(log::code::object_id);
+    text
+        | cc()
+        | gl
+        | _app_name_
+        | color::reset | ' ';
+
+    return text();
+}
+
+
 // desktop *application::screen_desktop()
 // {
 //     return desktop::instance();

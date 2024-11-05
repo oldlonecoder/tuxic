@@ -210,7 +210,7 @@ log::code vchar::render_string(vchar::string::iterator start, vchar::string::ite
                 else
                     if(it->d & UGlyph)
                         str += glyph::data[it->icon_id()];
-                ++it;
+            ++it;
         }
         else
             str += (it++)->ascii();

@@ -4,7 +4,7 @@ option(BUILD_TOOLS "Enable building (personal) Utility Tools library - Required"
 option(BUILD_LEXER "Enable building the Lexer & Tokens Library" 					ON)
 option(BUILD_EST "Enable building EST ([Arithmetic] Expression Syntax Tree) library" ON)
 option(BUILD_VISION  "Enable building the Vision (Ansi Text UI) library" 			ON)
-option(BUILD_TDDV "Build the tests application" 									OFF)
+option(BUILD_TDDV "Build the tests application" 									ON)
 
 SET(TUXIC_ROOT 			${CMAKE_CURRENT_SOURCE_DIR})
 SET(TOOLS_INCLUDE_DIR 	${TUXIC_ROOT}/include/tools})
@@ -33,7 +33,7 @@ endif()
 
 
 if(BUILD_TDDV)
-    add_subdirectory(tddv)
+    include(tddv/tddv.cmake)
 endif()
 
 

@@ -129,9 +129,9 @@ struct TUXIC_FRM glyph
     static constexpr T c_recieve               = "📥 ";      //  Receive
     static constexpr T c_email                 = "📫 ";      //  Email
     static constexpr T c_email2                = "📬 ";      //  Email2
-    static constexpr T c_nullptr               = "👽 ";      //  NullPtr
+    static constexpr T c_nullptr               = "⨂ ";      //  NullPtr
     static constexpr T c_stop                  = "⏹ ";      //Stop;
-    static constexpr T c_debian                = "";
+    static constexpr T c_debian                = " ";
     static constexpr T c_terminal              = " ";       // Terminal
     static constexpr T c_log                   = "";        // log
     static constexpr T c_sqpixel               = "▀";       // Pixel

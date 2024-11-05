@@ -167,7 +167,7 @@ private:
              integers::U8 line  : 1;
              integers::U8 col   : 1;
  */
-    header_component _headercomp_{1,1,1,1,1,1};
+    header_component _headercomp_{1,0,1,1,1,1};
 public:
 
     // struct TUXIC_FRM logentry

@@ -10,11 +10,13 @@ message("Current SourceDir:" ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 add_library("tuxic.${Target}" SHARED
-            include/${FRAMEWORK}/${Target}/alu.h    ${Target}/cc/alu.cc
-            include/${FRAMEWORK}/${Target}/node.h    ${Target}/cc/node.cc
-            include/${FRAMEWORK}/${Target}/variable.h    ${Target}/cc/variable.cc
-            include/${FRAMEWORK}/${Target}/bloc.h    ${Target}/cc/bloc.cc
-            include/${FRAMEWORK}/${Target}/expression.h    ${Target}/cc/expression.cc
+            include/${FRAMEWORK}/${Target}/alu.h ${Target}/cc/alu.cc
+            include/${FRAMEWORK}/${Target}/node.h ${Target}/cc/node.cc
+            include/${FRAMEWORK}/${Target}/variable.h ${Target}/cc/variable.cc
+            include/${FRAMEWORK}/${Target}/bloc.h ${Target}/cc/bloc.cc
+            include/${FRAMEWORK}/${Target}/expression.h ${Target}/cc/expression.cc
+            ../tddv/tddv.cc
+            ../tddv/tddv.h
 )
 
 

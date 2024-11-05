@@ -262,7 +262,7 @@ event::operator bool()
 
 log::code event::get_stdin_event(event &_event_, timeval tv)
 {
-    log::jnl() << "Enter:" << log::eol;
+    //log::jnl() << "Enter:" << log::eol;
 
     fd_set fds;
     FD_ZERO(&fds);                                          // NOLINT
@@ -287,10 +287,10 @@ log::code event::get_stdin_event(event &_event_, timeval tv)
 
     size_t r = ::read(STDIN_FILENO, buffer, 100);
     buffer[r] = 0;
-    //log::out() << "{" << color::yellow << tuxin::string::bytes(buffer) << color::reset << "}";
+    //log::out() << "{" << color::yellow << tux::string::bytes(buffer) << color::reset << "}";
 
-    ansi_parser cparser;
-    _event_.event_type = cparser.parse(_event_, buffer);
+    ansi_parser ansi_parser;
+    _event_.event_type = ansi_parser.parse(_event_, buffer);
 
     if(_event_.event_type == event::type::DROP)
         return log::code::rejected;

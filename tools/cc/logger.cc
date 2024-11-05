@@ -1,7 +1,7 @@
 //
 // Created by oldlonecoder on 14/06/24.
 //
-
+//  matricule UPS:
 #include <tuxic/tools/logger.h>
 
 
@@ -185,8 +185,8 @@ std::map<log::code, std::pair<glyph::type, color::pair>> codes_database={
     {log::code::untested,        {glyph::flag,            {color::yellow            ,color::reset }}},
     {log::code::eof,             {glyph::baseline,        {color::white             ,color::reset }}},
     {log::code::eos,             {glyph::baseline,        {color::white             ,color::reset }}},
-    {log::code::null_ptr,        {glyph::circle_x,        {color::hotpink4          ,color::reset }}},
-    {log::code::notexist  ,      {glyph::circle_x ,       {color::white             ,color::reset }}},
+    {log::code::null_ptr,        {glyph::circle_x,        {color::hotpink4            ,color::reset }}},
+    {log::code::notexist  ,      {glyph::circle_x ,       {color::white               ,color::reset }}},
     {log::code::exist     ,      {glyph::star5 ,          {color::white             ,color::reset }}},
     {log::code::unexpected,      {glyph::flag ,           {color::yellow            ,color::reset }}},
     {log::code::expected  ,      {glyph::cat ,            {color::white             ,color::reset }}},
@@ -202,10 +202,10 @@ std::map<log::code, std::pair<glyph::type, color::pair>> codes_database={
     {log::code::ready      ,     {glyph::ok,              {color::lime              ,color::reset }}},
     {log::code::terminate  ,     {glyph::flag,            {color::hotpink4          ,color::reset }}},
     {log::code::timeout    ,     {glyph::chronos,         {color::lime              ,color::reset }}},
-    {log::code::divbyzero  ,     {glyph::circle_x,        {color::red4              ,color::reset }}},
-    {log::code::notvisible ,     {glyph::circle_x,        {color::yellow            ,color::reset }}},
-    {log::code::cancel     ,     {glyph::circle_x,        {color::red4              ,color::reset }}},
-    {log::code::object_ptr ,     {glyph::log,             {color::lightsteelblue3   ,color::reset }}},
+    {log::code::divbyzero  ,     {glyph::circle_x,        {color::red4                ,color::reset }}},
+    {log::code::notvisible ,     {glyph::circle_x,        {color::yellow              ,color::reset }}},
+    {log::code::cancel     ,     {glyph::circle_x,        {color::red4                ,color::reset }}},
+    {log::code::object_ptr ,     {glyph::edit_pencil_br,{color::lightsteelblue3     ,color::reset }}},
     {log::code::object_id ,      {glyph::arrowright,      {color::yellow            ,color::reset }}},
 
 };
@@ -662,8 +662,8 @@ log &log::operator<<(log::fn fn)
             //auto txt{tux::string::now("{:%h:%m:%s}", tp)};
             auto [ic, a] = log::function_attributes(log::fn::stamp);
             tux::string acc;
-            acc | a.fg | glyph::data[ic] | color::reset | tux::string::now("%t");
-            text | acc();
+            acc | a.fg | glyph::data[ic] | color::reset |tux::string::now("%H:%M:%S");
+            text | acc() | " ";
             return *this;
         }
 

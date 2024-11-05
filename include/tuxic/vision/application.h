@@ -30,7 +30,7 @@ namespace tux::ui
 
 class TUXIC_FRM application
 {
-    //OBJECT_REFLECT(application)
+
 
     static void sig_interrupted(int);
     static void sig_aborted(int);
@@ -48,13 +48,13 @@ public:
     virtual ~application();
     application(std::string app_name, int argc, char **argv);
 
-    virtual log::code run(){ return log::code::notimplemented;}
+    virtual log::code run() = 0; //{ return log::code::notimplemented;}
     virtual log::code terminate();
 
 
     static application& app();
 //    static desktop* screen_desktop();
-
+    [[nodiscard]] std::string app_name() const;
 
 
 protected:
