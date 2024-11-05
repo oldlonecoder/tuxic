@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include <tuxic/tools/defs.h>
+#include <tuxic/defs.h>
 #include <map>
 #include <vector>
 #include <string>

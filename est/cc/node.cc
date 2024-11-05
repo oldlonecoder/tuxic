@@ -240,19 +240,19 @@ alu node::JSR()
         //log::debug() << log::fn::fun << color::white << attribute() << " Value:" << color::yellow << _a_->number<uint64_t>() << log::fn::endl << _token_->Details(true) ;
         if (_token_->is_operator())
         {
-            if (_l_) *_a_ = _l_->JSR(); // Always catch the lhs value so we return that one if t is no rhs operand.
-            if (_r_) *_a_ = _r_->JSR(); // Always catch the rhs value because it is the value to be returned after being applied to the lhs (if applicable).
+            if (_l_) *_a_ = _l_->JSR(); // Always execute the lhs ast node so we return that one if this has no rhs operand (_r_ == null).
+            if (_r_) *_a_ = _r_->JSR(); // Execute the rhs ast node if applicable(not null) - It is the usual return value.
 
             if (_op_fn_)
-                return (this->*_op_fn_)();// All operators assign acc.
+                return (this->*_op_fn_)();// All operators assign _a_.
             else
-                log::warning() << log::fn::func << "operator node [" << color::yellow << _token_->text() << color::reset << "] has no implementation (yet?).:\n" << _token_->mark();
+                log::warning() << log::fn::func << "operator node [" << color::yellow << _token_->text() << color::reset << "] has no implementation (yet?).:\n" << _token_->mark() << log::eol;
         }
         else
         {
             if(_op_fn_)
             {
-                log::debug() << log::fn::func << " Non operator call: " <<  _token_->mark();
+                log::debug() << log::fn::func << " Non operator call: " <<  _token_->mark()  << log::eol;
                 return (this->*_op_fn_)();
             }
 

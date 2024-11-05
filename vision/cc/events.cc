@@ -94,7 +94,7 @@ Because OpenBSD does not implement STREAMS, there is no distinction between some
 
 
 
-#include "tuxic/ui/events.h"
+#include "tuxic/vision/events.h"
 #include <sys/select.h>
 #include <sys/ioctl.h>
 
@@ -262,7 +262,7 @@ event::operator bool()
 
 log::code event::get_stdin_event(event &_event_, timeval tv)
 {
-    log::log() << "Enter:" << log::eol;
+    log::jnl() << "Enter:" << log::eol;
 
     fd_set fds;
     FD_ZERO(&fds);                                          // NOLINT

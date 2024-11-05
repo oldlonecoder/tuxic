@@ -10,8 +10,8 @@
  *   Copyrights from authors other than Serge Lussier also apply here      *
  ***************************************************************************/
 
-#include <tuxvision/ui/terminal.h>
-#include <tuxvision/tools/actions.h>
+#include <tuxic/vision/terminal.h>
+#include <tuxic/tools/actions.h>
 #include <termios.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -19,7 +19,7 @@
 //#include <thread>
 //#include <mutex>
 #include <csignal>
-#include <tuxvision/ui/vchar.h>
+//#include <tuxic/vision/vchar.h>
 
 namespace tux::ui::terminal
 {

@@ -10,7 +10,11 @@ message("Current SourceDir:" ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 add_library("tuxic.${Target}" SHARED
-            include/${FRAMEWORK}/
+            include/${FRAMEWORK}/${Target}/tuxns.h ${Target}/cc/tuxns.cc
+            include/${FRAMEWORK}/${Target}/terminal.h ${Target}/cc/terminal.cc
+            include/${FRAMEWORK}/${Target}/vchar.h ${Target}/cc/terminal.vchar.cc
+            include/${FRAMEWORK}/${Target}/events.h ${Target}/cc/events.cc
+            include/${FRAMEWORK}/${Target}/application.h ${Target}/cc/application.cc
 
 )
 
@@ -31,7 +35,7 @@ IF (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json")
 ENDIF ()
 
 
-target_link_libraries("tuxic.${Target}" ${CMAKE_DL_LIBS} tuxic.tools tuxic.lexer) # and other system dependencies...
+target_link_libraries("tuxic.${Target}" ${CMAKE_DL_LIBS} tuxic.tools tuxic.lexer tuxic.est) # and other system dependencies...
 
 
 

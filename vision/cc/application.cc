@@ -1,7 +1,7 @@
 
 
-#include "tuxic/ui/application.h"
-#include "tuxic/ui/terminal.h"
+#include <tuxic/vision/application.h>
+#include <tuxic/vision/terminal.h>
 #include <csignal>
 #include <utility>
 
@@ -93,18 +93,18 @@ log::code application::install_signals()
 {
 
     std::signal(SIGSEGV, &application::sig_crash);
-    log::log() << "signal SIGSEV installed."  << log::eol;
+    log::jnl() << "signal SIGSEV installed."  << log::eol;
     std::signal(SIGABRT, &application::sig_aborted);
-    log::log() << "signal SIGABRT installed."  << log::eol;
+    log::jnl() << "signal SIGABRT installed."  << log::eol;
     std::signal(SIGINT, &application::sig_interrupted);
-    log::log() << "signal SIGINT installed."  << log::eol;
+    log::jnl() << "signal SIGINT installed."  << log::eol;
     std::signal(SIGWINCH, &application::sig_winch);
-    log::log() << "signal SIGWINCH installed."  << log::eol;
+    log::jnl() << "signal SIGWINCH installed."  << log::eol;
     // std::signal(SIGHUP, &application::sig_winch);
     std::signal(SIGKILL, &application::sig_interrupted);
-    log::log() << "signal SIGKILL installed." << log::eol;
+    log::jnl() << "signal SIGKILL installed." << log::eol;
     std::signal(SIGTERM, &application::sig_interrupted);
-    log::log() << "signal SIGTERM installed." << log::eol;
+    log::jnl() << "signal SIGTERM installed." << log::eol;
 
     return log::code::done;
 }

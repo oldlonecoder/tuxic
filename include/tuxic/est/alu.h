@@ -17,7 +17,7 @@
 
 #include <tuxic/tools/logger.h>
 #include <tuxic/lexer/lexer_types.h>
-#include <tuxic/est/defs.h>
+#include <tuxic/defs.h>
 
 #include <memory>
 #include <vector>

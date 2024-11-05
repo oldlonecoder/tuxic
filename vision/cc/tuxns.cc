@@ -3,7 +3,7 @@
 //#include "tuxic/tools/colors.h"
 #include <sys/epoll.h>
 #include <unistd.h>
-#include "tuxic/ui/globals.h"
+#include <tuxic/vision/tuxns.h>
 
 namespace tux::ui::colors
 {

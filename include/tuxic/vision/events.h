@@ -27,7 +27,7 @@
 #    error "non-linux os not implemented yet"
 #endif
 
-#include "tuxic/journal/book.h"
+#include <tuxic/tools/logger.h>
 #include <cstdlib>
 #include <cerrno>
 #include <cstring>

@@ -19,11 +19,11 @@
 #pragma once
 
 
-#include <tuxvision/ui/events.h>
+#include <tuxic/vision/events.h>
 #include <csignal>
 #include <memory>
-#include <tuxvision/tools/cadres.h>
-#include <tuxvision/ui/widget/uiscreen.h>
+#include <tuxic/tools/cadres.h>
+
 
 namespace tux::ui
 {
@@ -65,7 +65,7 @@ protected:
     virtual size_t push_event(event&& ev);
     virtual event pop_event();
 
-    terminal::desktop*  _current_screen_{nullptr};
+    //terminal::desktop*  _current_screen_{nullptr};
 
 };
 

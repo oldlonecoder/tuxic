@@ -20,7 +20,7 @@
 #pragma once
 
 #include <map>
-#include <tuxic/lexer/defs.h>
+#include <tuxic/defs.h>
 
 using namespace integers;
 namespace tux

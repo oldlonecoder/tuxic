@@ -13,15 +13,7 @@
 #pragma once
 
 
-#include "tuxic/exports"
-#include <tuxvision/ui/globals.h>
-#include <tuxvision/journal/book.h>
-#include <tuxvision/tools/actions.h>
-#include <tuxvision/tools/object.h>
-
-
-
-
+#include <tuxic/vision/terminal.h>
 
 
 namespace tux::ui::terminal

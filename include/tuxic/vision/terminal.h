@@ -15,11 +15,11 @@
 
 #pragma once
 
-#include "tuxic/exports"
-#include <tuxvision/ui/globals.h>
-#include <tuxvision/journal/book.h>
-#include <tuxvision/tools/actions.h>
-#include <tuxvision/tools/object.h>
+#include <tuxic/defs.h>
+#include <tuxic/vision/tuxns.h>
+#include <tuxic/tools/logger.h>
+#include <tuxic/tools/actions.h>
+#include <tuxic/tools/object.h>
 
 namespace tux::ui::terminal
 {
