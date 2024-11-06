@@ -534,9 +534,9 @@ void log::init_header()
         if(words.size() > 1)
         {
             auto i = words.end();
-            i--; // filename
+            --i; // filename
             auto filename = *i;
-            i--; // parent dir
+            --i; // parent dir
             text | **i;
             ++i;
             text | '/' | **i | ' ';
@@ -600,7 +600,7 @@ log &log::operator<<(log::action a_action)
             if(!log::current_section->fout)
                 return *this;
 
-            *(log::current_section->fout) << text() << std::flush;
+            *(log::current_section->fout) << text() << "\r\n" << std::flush;
             log::current_section->remove_last();
             return *this;
 
@@ -714,7 +714,7 @@ log &log::operator<<(log::fn fn)
         }
         case log::fn::func:
             auto [gh, colors] = log::function_attributes(log::fn::func);
-            text | "From [" | colors | location.function_name() | color::reset | "]\n";
+            text | "From " | colors | location.function_name() | color::reset | "\n";
             break;
 
         //default: break;

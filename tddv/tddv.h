@@ -26,6 +26,9 @@ namespace tux
 
 class tddv : public ui::application
 {
+
+    CLASSNAME(tddv)
+
 public:
 
     ~tddv()override;

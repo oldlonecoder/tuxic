@@ -92,7 +92,7 @@ std::string application::app_name() const
     text
         | colors()
         | gh
-        | " tux::ui::application"
+        | class_name()
         | color::reset | "::";
     auto [gl, cc] = log::return_code_attributes(log::code::object_id);
     text

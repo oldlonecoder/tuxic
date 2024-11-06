@@ -31,6 +31,7 @@ namespace tux::ui
 class TUXIC_FRM application
 {
 
+    CLASSNAME_START(application)
 
     static void sig_interrupted(int);
     static void sig_aborted(int);

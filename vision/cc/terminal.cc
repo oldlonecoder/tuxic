@@ -48,7 +48,7 @@ log::code query_winch()
         return log::code::notexist;
 
     _geometry_ = ui::rectangle{{0,0}, ui::size{static_cast<int>(win.ws_col), static_cast<int>(win.ws_row)}};
-    log::info() << log::fn::func << " terminal resize to:" << color::yellow << std::format("{:>3d}x{:<3d}",_geometry_.dwh.w,_geometry_.dwh.h);
+    log::message() << " (new) terminal size: [" << color::yellow << std::format("{:>3d}x{:<3d}",_geometry_.dwh.w,_geometry_.dwh.h) << color::reset << "]" << log::eol;
     return log::code::done;
 }
 
