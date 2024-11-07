@@ -15,10 +15,10 @@
 
 #pragma once
 
-#include <tuxvision/tools/object.h>
-#include <tuxvision/ui/globals.h>
-#include <tuxvision/ui/terminal.h>
-#include <tuxvision/ui/vchar.h>
+#include <tuxic/tools/object.h>
+#include <tuxic/vision/tuxns.h>
+#include <tuxic/vision/terminal.h>
+#include <tuxic/vision/vchar.h>
 #include <list>
 
 namespace tux::ui
@@ -35,7 +35,7 @@ class TUXIC_FRM widget : public object
 {
     CLASSNAME(widget)
 
-    terminal::vchar::back_buffer _bloc_{nullptr};
+    terminal::vchar::back_buffer _back_buffer_{nullptr};
 
     friend class terminal::desktop;
 

@@ -1,4 +1,4 @@
-#include <tuxvision/ui/widget.h>
+#include <tuxic/vision/widget.h>
 
 //#include "tuxic/ui/widget/uiscreen.h"
 
@@ -6,12 +6,10 @@ namespace tux::ui
 {
 
 
-#define CHECK_BLOC \
-if(!_bloc_)\
+#define CHECK_BACK_BUFFER \
+if(!_back_buffer_)\
     throw log::exception() [ log::except() <<  log::code::null_ptr << " undefined backbuffer on: "\
-   << color::lightsteelblue << class_name()\
-   << color::reset <<"::"\
-   << color::yellow << id()\
+   << color::lightsteelblue << pretty_id()\
 ];
 
 
@@ -66,17 +64,17 @@ log::code widget::set_geometry(const rectangle &r)
     {
         log::out() << "parent [" << color::yellow << p->pretty_id() << "]::bloc is assigned to " << pretty_id() << "." << log::eol;
         if(_uistyle_ & ui::uistyle::Window)  goto TOPLVL;
-        _bloc_ = p->_bloc_;
+        _back_buffer_ = p->_back_buffer_;
     }
     else
     {
 TOPLVL:
-        _bloc_ = std::make_shared<terminal::vchar::string>(_geometry_.dwh.area(), terminal::vchar(_colors_));
+        _back_buffer_ = std::make_shared<terminal::vchar::string>(_geometry_.dwh.area(), terminal::vchar(_colors_));
         _uistyle_ |= ui::uistyle::Window;
         log::out() << pretty_id() << " is a toplevel widget: Thus it owns the back_buffer" << log::eol;
     }
 
-    _iterator_ = _bloc_.get()->begin();
+    _iterator_ = _back_buffer_.get()->begin();
 
     log::out() << pretty_id() << color::reset << " assigned geometry:" << _geometry_ << log::eol;
     return log::code::done;
@@ -103,7 +101,7 @@ log::code widget::set_theme(const std::string &theme_id)
     _states_colors_ =  ui::colors::attr_db::theme()[_theme_id_]["Widget"];
     _colors_ = _states_colors_[ui::uistate::Active];
 
-    log::log() << color::yellow << id() << color::reset << " theme set to '" << _states_colors_[_uistate_] << " " <<  _theme_id_ << " " << color::reset << "'.";
+    log::jnl() << color::yellow << id() << color::reset << " theme set to '" << _states_colors_[_uistate_] << " " <<  _theme_id_ << " " << color::reset << "'.";
     return log::code::accepted;
 }
 
@@ -115,7 +113,7 @@ log::code widget::set_theme(const std::string &theme_id)
  */
 log::code widget::peek_xy(cxy xy)
 {
-    CHECK_BLOC
+    CHECK_BACK_BUFFER
 
     if(!_geometry_.tolocal()[xy])
         throw log::exception()[
@@ -138,8 +136,8 @@ log::code widget::peek_xy(cxy xy)
     else
     {
         // log::debug() << log::fn::fun << " Assign internal _iterator_ offset at [" << color::yellow << xy << "]:";
-        _iterator_ = _bloc_->begin() + xy.y * *_geometry_.width() + xy.x;
-        // log::out() << "_iterator_ offset (linear position): " << color::hotpink4 << _iterator_-_bloc_->begin() << color::reset;
+        _iterator_ = _back_buffer_->begin() + xy.y * *_geometry_.width() + xy.x;
+        // log::out() << "_iterator_ offset (linear position): " << color::hotpink4 << _iterator_-_back_buffer_->begin() << color::reset;
     }
     //log::debug() << color::lime << id() << color::grey100 << "::" << color::lightsteelblue3 << "peek_xy" << color::grey100 << "(" << color::red4 << xy << color::grey100 << ").";
     return log::code::accepted;
@@ -170,7 +168,7 @@ terminal::vchar::string::iterator widget::operator[](cxy xy){ return at(xy); }
 log::code widget::set_anchor(ui::anchor::value _ank)
 {
     _anchor_ = _ank;
-    // if(_bloc_ && _geometry_)
+    // if(_back_buffer_ && _geometry_)
     //     auto_fit();
     //... We have to check conflicting and confusing bits.
 
@@ -280,7 +278,7 @@ bool widget::is_hidden() const
 /*!
  * \brief widget::draw
  * Self-draw or predefined draw() of the widget.
- * At this area, the base class only clears and or reset the back buffer _bloc_ with the current colors
+ * At this area, the base class only clears and or reset the back buffer _back_buffer_ with the current colors
  * \return
  */
 log::code widget::draw()
@@ -438,7 +436,7 @@ log::code widget::setup_components()
 /*!
  * \brief widget::begin_draw
  *
- * Creates an instance of widget::painter_dc object for different 'drawing' capabilities on the widget's back buffer _bloc_,
+ * Creates an instance of widget::painter_dc object for different 'drawing' capabilities on the widget's back buffer _back_buffer_,
  * drawing confined by the subarea.
  *
  * \param sub_area  confined rectangle within the back buffer geometry.
@@ -466,12 +464,12 @@ void widget::end_draw(painter_dc &edc)
  */
 void widget::clear()
 {
-    CHECK_BLOC
+    CHECK_BACK_BUFFER
 
     log::debug() << color::grey100 << class_name() << color::lightcyan3 << '[' << color::lightsteelblue3 <<  id() << color::lightcyan3 << ']' << _colors_() << " >>colors<< ;" << color::yellow << _geometry_.tolocal() << log::eol;
 
     if(is_window())
-        std::fill(_bloc_->begin(), _bloc_->end(), terminal::vchar(_colors_));
+        std::fill(_back_buffer_->begin(), _back_buffer_->end(), terminal::vchar(_colors_));
     else
     {
         if(auto p = parent<widget>(); p)
@@ -674,12 +672,12 @@ log::code widget::auto_fit()
  */
 log::code widget::resize(size new_sz)
 {
-    CHECK_BLOC
+    CHECK_BACK_BUFFER
     _geometry_.resize(new_sz);
     log::info() <<  "new geometry: " << color::yellow << _geometry_ << log::eol;
     if(is_window())
     {
-        _bloc_->resize(new_sz.area(), terminal::vchar(_colors_));
+        _back_buffer_->resize(new_sz.area(), terminal::vchar(_colors_));
         log::out() << " bloc reallocation done." << log::eol;
     }
     return log::code::done;

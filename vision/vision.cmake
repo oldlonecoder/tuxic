@@ -15,6 +15,7 @@ add_library("tuxic.${Target}" SHARED
             include/${FRAMEWORK}/${Target}/vchar.h ${Target}/cc/terminal.vchar.cc
             include/${FRAMEWORK}/${Target}/events.h ${Target}/cc/events.cc
             include/${FRAMEWORK}/${Target}/application.h ${Target}/cc/application.cc
+            include/${FRAMEWORK}/${Target}/widget.h ${Target}/cc/widget.cc ${Target}/cc/widget_painter.cc
 
 )
 

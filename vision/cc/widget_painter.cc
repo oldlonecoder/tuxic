@@ -1,4 +1,4 @@
-#include <tuxvision/ui/widget.h>
+#include <tuxic/vision/widget.h>
 
 
 
@@ -36,7 +36,7 @@ log::code widget::painter_dc::at(cxy xy)
 
     if(!_geometry_.tolocal()[xy])
     {
-        log::error() << log::fn::func << log::code::oob << " -> " << color::red4 << xy << color::reset << " within rect:" << color::yellow << _geometry_.tolocal();
+        log::error() << log::fn::func << log::code::oob << " -> " << color::red4 << xy << color::reset << " within rect:" << color::yellow << _geometry_.tolocal() << log::eol;
         return log::code::oob;
     }
     //log::debug() << color::lime << _widget_->id() << color::reset << "->painter_dc invokes  at(" << color::yellow << (xy +  _geometry_.a) << color::reset << "):";
@@ -118,7 +118,7 @@ widget::painter_dc &widget::painter_dc::set_background_color(color::code bgcol)
 
 log::code widget::painter_dc::operator ++()
 {
-    if(_iterator_ >= _widget_->_bloc_->end())
+    if(_iterator_ >= _widget_->_back_buffer_->end())
         return log::code::rejected;
     ++_iterator_;
     ++_geometry_; // advance internal xy cursor
@@ -231,4 +231,3 @@ widget::painter_dc& widget::painter_dc::operator << (terminal::vchar::string str
 
 
 } // namespace tux::ui
-
