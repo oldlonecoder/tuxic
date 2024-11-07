@@ -27,23 +27,20 @@ namespace tux
 {
 
 
-tddv::~tddv() = default;
-//{
-//}
-
-
-tddv::tddv(std::string app_name, int argc, char** argv): ui::application(std::move(app_name), argc, argv)
+tddv::~tddv()
 {
-    // Init is RAII :
-    application::setup();
-    // setup() -> setup_ui().
+    // Can't delete test widget here because the logger is already closed.
 }
 
 
+tddv::tddv(std::string app_name, int argc, char** argv): ui::application(std::move(app_name), argc, argv){}
 
-log::code tddv::setup()
+
+
+log::code tddv::tddv_setup()
 {
-    application::setup();
+    //application::setup();
+    log::debug() << log::eol;
     //...
 
     return setup_ui();
@@ -52,7 +49,18 @@ log::code tddv::setup()
 
 log::code tddv::setup_ui()
 {
-    return log::code::notimplemented;
+
+    _test_widget_ = new ui::widget(nullptr, "_test_widget_");
+    log::test() << _test_widget_->pretty_id() << "has been created..." << log::eol;
+    _test_widget_->set_geometry({{2,5},ui::size{40,5}});
+    _test_widget_->set_theme("C64");
+    _test_widget_->draw();
+    auto p = _test_widget_->begin_draw();
+    p.home() << "widget::" << _test_widget_->id();
+    _test_widget_->end_draw(p);
+    _test_widget_->show();
+    log::jnl() << app_name() << " ui..." << log::code::done << log::eol;
+    return log::code::done;
 }
 
 
@@ -61,6 +69,7 @@ log::code tddv::run()
 {
     try
     {
+        tddv_setup();
         log::jnl() << log::fn::stamp << app_name() << log::eol;
         ui::event ev{};
         auto c = log::code::ok;
@@ -83,7 +92,7 @@ log::code tddv::run()
 log::code tddv::terminate()
 {
     //...
-
+    delete _test_widget_;
     return application::terminate();
 }
 

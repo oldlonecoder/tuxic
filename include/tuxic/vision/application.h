@@ -59,7 +59,7 @@ public:
 
 
 protected:
-    virtual log::code setup();
+    log::code setup();
     virtual log::code setup_ui(){ return log::code::reimplement; }
     virtual log::code install_signals();
 

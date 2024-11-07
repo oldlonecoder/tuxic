@@ -27,6 +27,7 @@ application::application(std::string  a_id, int argc, char** argv): _app_name_(s
     }
     else
         abort();
+    setup();
 }
 
 

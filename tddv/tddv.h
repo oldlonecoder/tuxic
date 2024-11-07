@@ -21,6 +21,9 @@
 
 #include <tuxic/vision/application.h>
 #include <tuxic/vision/events.h>
+
+#include "tuxic/vision/widget.h"
+
 namespace tux
 {
 
@@ -28,6 +31,8 @@ class tddv : public ui::application
 {
 
     CLASSNAME(tddv)
+
+    ui::widget* _test_widget_{nullptr};
 
 public:
 
@@ -38,7 +43,7 @@ public:
     log::code terminate() override;
 
 protected:
-    log::code setup() override;
+    log::code tddv_setup();
     log::code setup_ui()  override;
 
     //size_t push_event(ui::event&& ev) override;
