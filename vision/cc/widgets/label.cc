@@ -37,9 +37,12 @@ log::code label::setup_ui()
 
     if(has_component(ui::components::PrefixGlyph))
     {
-        new icon(this, )
+        set_prefix_icon(glyph::alien);
     }
+    if(has_component(ui::components::SuffixGlyph))
+        set_suffix_icon(glyph::alien);
 
+    return log::code::ok;
 }
 
 

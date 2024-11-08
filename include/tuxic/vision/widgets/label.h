@@ -16,7 +16,7 @@
 #pragma once
 
 
-#include <tuxic/vision/widget.h>
+#include <tuxic/vision/widgets/icon.h>
 
 
 namespace tux::ui
@@ -29,8 +29,8 @@ class label : public widget
 
     ui::justify::Type _justify_{ui::justify::auto_size};
     ui::cxy _text_xy_{0,0};
-    widget* _prefix_icon_{nullptr};
-    widget* _suffix_icon_{nullptr};
+    icon* _prefix_icon_{nullptr};
+    icon* _suffix_icon_{nullptr};
 public:
     label()=default;
     ~label() override;
