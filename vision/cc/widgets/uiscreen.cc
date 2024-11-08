@@ -25,7 +25,7 @@ desktop::desktop(const std::string &_id):widget(nullptr,_id)
 {
     if(desktop::the_screen)
     {
-        log::error() << log::fn::func << pretty_id() << " cannot create another screen widget  : use '" << desktop::the_screen->id() << "' instead and destroy this non-usable instance.";
+        log::error() << log::fn::func << pretty_id() << " cannot create another screen widgets  : use '" << desktop::the_screen->id() << "' instead and destroy this non-usable instance.";
         return ;
     }
     //...

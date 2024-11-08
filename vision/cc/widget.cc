@@ -1,6 +1,6 @@
 #include <tuxic/vision/widget.h>
 
-//#include "tuxic/ui/widget/uiscreen.h"
+//#include "tuxic/ui/widgets/uiscreen.h"
 
 namespace tux::ui
 {
@@ -22,10 +22,10 @@ widget::widget()
 
 
 /*!
- * \brief widget::widget
+ * \brief widgets::widgets
  * Must be the only valid constructor used for instantiating any of the parent-children relational objects.
  * \param _parent_obj
- * \param _id    Identifier for this widget. (such as the variable name used when creating this widget )
+ * \param _id    Identifier for this widgets. (such as the variable name used when creating this widgets )
  */
 widget::widget(object *_parent_obj, const std::string& _id):object(_parent_obj, _id){}
 
@@ -34,8 +34,8 @@ widget::~widget()= default;
 
 
 /*!
- * \brief widget::set_geometry
- * Define the widget's geometry.
+ * \brief widgets::set_geometry
+ * Define the widgets's geometry.
  * \param r ui::rectangle : the requested geometry values.
  * \return
  */
@@ -71,7 +71,7 @@ log::code widget::set_geometry(const rectangle &r)
 TOPLVL:
         _back_buffer_ = std::make_shared<terminal::vchar::string>(_geometry_.dwh.area(), terminal::vchar(_colors_));
         _uistyle_ |= ui::uistyle::Window;
-        log::out() << pretty_id() << " is a toplevel widget: Thus it owns the back_buffer" << log::eol;
+        log::out() << pretty_id() << " is a toplevel widgets: Thus it owns the back_buffer" << log::eol;
     }
 
     _iterator_ = _back_buffer_.get()->begin();
@@ -81,7 +81,7 @@ TOPLVL:
 }
 
 /*!
- * \brief widget::set_theme
+ * \brief widgets::set_theme
  * Query the theme id from the colors::attr_db.
  * Sets the internal _style_ and _colors_ from the query values.
  * \param theme_id
@@ -106,7 +106,7 @@ log::code widget::set_theme(const std::string &theme_id)
 }
 
 /*!
- * \brief widget::position
+ * \brief widgets::position
  * Explicitly sets the internal iterator at the coordinates xy - _iterator_ is then ready for read/write operations.
  * \param xy
  * \return accepted or rejected if xy is pout of boundaries of local geometry.
@@ -144,7 +144,7 @@ log::code widget::peek_xy(cxy xy)
 }
 
 /*!
- * \brief widget::position
+ * \brief widgets::position
  * Explicitly sets the internal iterator at the coordinates xy
  * \param xy
  * \return the value of _iterator_.
@@ -276,8 +276,8 @@ bool widget::is_hidden() const
 
 
 /*!
- * \brief widget::draw
- * Self-draw or predefined draw() of the widget.
+ * \brief widgets::draw
+ * Self-draw or predefined draw() of the widgets.
  * At this area, the base class only clears and or reset the back buffer _back_buffer_ with the current colors
  * \return
  */
@@ -297,7 +297,7 @@ log::code widget::draw()
 
 
 /*!
- * \brief widget::dirty
+ * \brief widgets::dirty
  * Invalidating the sub-area defined by the dirty_area rectangle. 'sub' area is applied using Union operation (ui::rectangle::operator | (ui::rectangle rhs))
  *  between _dirty_area_ member attribute and the given dirty_rect argument.
  * \param dirty_rect  mandatory valid rectangle.
@@ -329,7 +329,7 @@ log::code widget::dirty(const rectangle &dirty_rect)
 bad_cpp_jump:
     if(auto p = parent<widget>(); p != nullptr)
     {
-        //log::out() << color::yellow << "signal parent widget '" << color::lime << p->id() << color::reset << "' :";
+        //log::out() << color::yellow << "signal parent widgets '" << color::lime << p->id() << color::reset << "' :";
         return p->dirty(_dirty_area_+_geometry_.a);
     }
 
@@ -339,10 +339,10 @@ bad_cpp_jump:
 
 
 /*!
- * \brief widget::update_child
- *      Updates merging child widget dirty area with this dirty area..
+ * \brief widgets::update_child
+ *      Updates merging child widgets dirty area with this dirty area..
  * \param w
- * \return rejected if invalid computed rectangle ( requested area not visible within this geometry, or child widget has no current dirty area to update.).
+ * \return rejected if invalid computed rectangle ( requested area not visible within this geometry, or child widgets has no current dirty area to update.).
  */
 log::code widget::update_child(widget *w)
 {
@@ -353,8 +353,8 @@ log::code widget::update_child(widget *w)
 
 
 /*!
- * \brief widget::render
- *          Temporary function to render this widget on the screen console.
+ * \brief widgets::render
+ *          Temporary function to render this widgets on the screen console.
  * \return
  */
 log::code widget::render()
@@ -428,19 +428,19 @@ log::code widget::position_child(widget* w)
 
 log::code widget::setup_components()
 {
-    log::status() << " called the base widget class. " << log::code::reimplement << " - is this a derived class ? :" << pretty_id() << log::eol;
+    log::status() << " called the base widgets class. " << log::code::reimplement << " - is this a derived class ? :" << pretty_id() << log::eol;
     return log::code::reimplement;
 }
 
 
 /*!
- * \brief widget::begin_draw
+ * \brief widgets::begin_draw
  *
- * Creates an instance of widget::painter_dc object for different 'drawing' capabilities on the widget's back buffer _back_buffer_,
+ * Creates an instance of widgets::painter_dc object for different 'drawing' capabilities on the widgets's back buffer _back_buffer_,
  * drawing confined by the subarea.
  *
  * \param sub_area  confined rectangle within the back buffer geometry.
- * \return new instance of widget::painter_dc.
+ * \return new instance of widgets::painter_dc.
  */
 widget::painter_dc widget::begin_draw(const rectangle& sub_area)
 {
@@ -448,7 +448,7 @@ widget::painter_dc widget::begin_draw(const rectangle& sub_area)
 }
 
 /*!
- * \brief widget::end_draw
+ * \brief widgets::end_draw
  * Triggers dirty call.
  * \param edc
  */
@@ -459,8 +459,8 @@ void widget::end_draw(painter_dc &edc)
 
 
 /*!
- * \brief widget::clear
- * Just clears the widget's back buffer with the current colors
+ * \brief widgets::clear
+ * Just clears the widgets's back buffer with the current colors
  */
 void widget::clear()
 {
@@ -483,14 +483,14 @@ void widget::clear()
 
 
 /*!
- * @brief Updates the widget.
+ * @brief Updates the widgets.
  * @return ok
  */
 log::code widget::update()
 {
     auto p = parent<widget>();
 
-    // no dirty rect = this widget has nothing to update.
+    // no dirty rect = this widgets has nothing to update.
     if(!_dirty_area_) return log::code::ok;
 
     if(p) return p->update_child(this);
@@ -543,7 +543,7 @@ log::code widget::anchor_widget(widget* w)
 {
     if(w->parent<widget>() != this)
     {
-        log::error() <<  " widget " << w->pretty_id() << " is not a child widget of " << pretty_id() << ". - Request rejected." << log::eol;
+        log::error() <<  " widgets " << w->pretty_id() << " is not a child widgets of " << pretty_id() << ". - Request rejected." << log::eol;
         return log::code::rejected;
     }
     //...
@@ -556,10 +556,24 @@ log::code widget::anchor_widget(widget* w)
 
 log::code widget::setup_ui()
 {
-    log::warning() <<  " widget " << pretty_id() << " has no manageable components in the base class. - " << log::fn::endl << log::code::reimplement  << log::eol;
+    log::warning() <<  " widgets " << pretty_id() << " has no manageable components in the base class. - " << log::fn::endl << log::code::reimplement  << log::eol;
     return log::code::reimplement;
 }
 
+
+/*!
+ * @brief Add component(s) to the _uicomponents_ bits as implicitly constructed and managed ui widgets ...
+ *
+ * It is a public method, but it is normally designed to be called from derived classes to build and setup its specific ...ui components...
+ * @param _cmp ui::components::type value
+ * @return accepted;
+ */
+log::code widget::add_component(ui::components::type _cmp)
+{
+    _uicomponents_ |= _cmp;
+    //...
+    return log::code::accepted;
+}
 
 
 void widget::set_components(ui::components::type c) { _uicomponents_ = c; }
@@ -572,8 +586,8 @@ void widget::set_uiclass(ui::uiclass::Type cls) { _uiclass_ = cls; }
 
 
 /*!
- * \brief Protected instance widget::auto_fit
- * Auto fit this widget into the parent widget according to the anchor value.
+ * \brief Protected instance widgets::auto_fit
+ * Auto fit this widgets into the parent widgets according to the anchor value.
 
  * \return  accepted or rejected.
  * \note As of Oct 2024, this method is not 100% usable. It is actually in development and experimentation.
@@ -664,8 +678,8 @@ log::code widget::auto_fit()
 
 
 /*!
- * \brief widget::resize
- * Resize the geometry of this widget.
+ * \brief widgets::resize
+ * Resize the geometry of this widgets.
  * \param new_sz
  * \return done.
  * \note As of Oct. 2024, there is no size checking! tuxvision is in early dev/experiments/learning and R&D.
@@ -686,7 +700,7 @@ log::code widget::resize(size new_sz)
 
 
 /*!
- * \brief widget::draw_frame
+ * \brief widgets::draw_frame
  *      Draw a rectangular frame given by the r argument.
  * \param r
  * \return rejected or accepted.

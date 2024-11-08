@@ -1,13 +1,13 @@
 
 
-#include <tuxvision/ui/widget/label.h>
-
+#include <tuxic/vision/widgets/label.h>
+#include <tuxic/vision/widgets/icon.h>
 
 
 namespace tux::ui
 {
 
-label::label(object* _parent_widget, const std::string _id): widget(_parent_widget,_id)
+label::label(object* _parent_widget, const std::string& _id): widget(_parent_widget,_id)
 {
     _geometry_.dwh.set_min_size(1,1);
 }
@@ -31,10 +31,53 @@ log::code label::draw()
 }
 
 
+log::code label::setup_ui()
+{
+    widget::setup_ui();
+
+    if(has_component(ui::components::PrefixGlyph))
+    {
+        new icon(this, )
+    }
+
+}
+
+
+log::code label::set_prefix_icon(glyph::type ic_id)
+{
+    if(!_prefix_icon_)
+    {
+        _prefix_icon_ = new icon(this, "prefix_icon", ic_id);
+        _prefix_icon_->set_geometry({{0,0},ui::size{2,1}});
+        _prefix_icon_->set_theme(theme_name());
+    }
+
+    _prefix_icon_->set(ic_id);
+
+
+    return log::code::accepted;
+}
+
+
+log::code label::set_suffix_icon(glyph::type ic_id)
+{
+    if(!_suffix_icon_)
+    {
+        _suffix_icon_ = new icon(this, "prefix_icon", ic_id);
+        _suffix_icon_->set_geometry({{_geometry_.dwh.w-2,0},ui::size{2,1}});
+        _suffix_icon_->set_theme(theme_name());
+    }
+
+    _suffix_icon_->set(ic_id);
+
+
+    return log::code::accepted;
+}
+
 
 log::code label::set_text(const std::string& _txt)
 {
-    log::log() << pretty_id() << log::eol;
+    log::jnl() << pretty_id() << log::eol;
     _text_ = _txt;
     log::out() << " text set to '" << _text_ << "';" << log::eol;
     dirty(_geometry_.tolocal());

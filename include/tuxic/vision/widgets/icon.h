@@ -1,5 +1,9 @@
-//#ifndef INTUI_GLOBALS_H
-//#define INTUI_GLOBALS_H
+//
+// Created by oldlonecoder on 24-11-08.
+//
+
+//#ifndef ICON_H
+//#define ICON_H
 /***************************************************************************
  *   Copyright (C) 1965/1987/2023 by Serge Lussier                         *
  *   serge.lussier@oldlonecoder.club                                       *
@@ -14,35 +18,23 @@
 
 
 #pragma once
-
-
 #include <tuxic/vision/widget.h>
-
-
 namespace tux::ui
 {
 
-class label : public widget
+class TUXIC_FRM icon : public widget
 {
-    CLASSNAME(label)
-    std::string _text_{};
+    glyph::type _icon_{glyph::alien};
 
-    ui::justify::Type _justify_{ui::justify::auto_size};
-    ui::cxy _text_xy_{0,0};
-    widget* _prefix_icon_{nullptr};
-    widget* _suffix_icon_{nullptr};
 public:
-    label()=default;
-    ~label() override;
-    label(object* _parent_widget, const std::string& _id);
-    log::code set_text(const std::string& _txt);
-    log::code set_justify(ui::justify::Type j);
+    icon()=default;
+    icon(object* _parent, const std::string& ic_id, glyph::type _type_value);
+    ~icon() override = default;
+
     log::code draw() override;
-
-    log::code setup_ui() override;
-    log::code set_prefix_icon(glyph::type ic_id);
-    log::code set_suffix_icon(glyph::type ic_id);
-
+    void set(glyph::type _type_value) { _icon_ = _type_value; }
 
 };
-}
+
+
+} // namespace tux::ui

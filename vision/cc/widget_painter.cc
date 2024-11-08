@@ -17,7 +17,7 @@ namespace tux::ui
 
 
 /*!
- * \brief Instance public constructor widget::painter_dc::painter_dc
+ * \brief Instance public constructor widgets::painter_dc::painter_dc
  * \param parent_widget
  * \param r
  */
@@ -48,7 +48,7 @@ log::code widget::painter_dc::at(cxy xy)
 
 
 /*!
- * \brief widget::painter_dc::sync
+ * \brief widgets::painter_dc::sync
  *  Make sure that our internal _iterator_ is in sync with the internal _geometry_.cursor position.
  * \return result from at(_geometry_.cursor);
  */
@@ -61,7 +61,7 @@ log::code widget::painter_dc::sync()
 
 
 /*!
- * \brief Instance public widget::painter_dc::clear
+ * \brief Instance public widgets::painter_dc::clear
     clears the (sub-)area \c r with the current colors attributes.
  * \param r
  * \return ref to self.
@@ -75,7 +75,7 @@ widget::painter_dc &widget::painter_dc::clear(const rectangle &r)
         area = _geometry_.tolocal();
 
     log::out() << "clear area: " << color::red4 << area << color::reset;
-    // if(auto p = _widget_->parent<widget>(); p)
+    // if(auto p = _widget_->parent<widgets>(); p)
     // {
     //     log::out() << " clear child '" << color::lime << _widget_->id() << color::reset << "' " << color::lime << _widget_->_geometry_ << color::reset <<" of parent: '" << color::yellow << p->id() << color::reset;
     // }
@@ -105,7 +105,7 @@ widget::painter_dc& widget::painter_dc::home()
 
 
 /*!
- * \brief Instance public widget::painter_dc::set_background_color
+ * \brief Instance public widgets::painter_dc::set_background_color
  * \param bgcol ...
  * \return ref to self.
  */

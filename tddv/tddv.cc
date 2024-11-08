@@ -29,7 +29,7 @@ namespace tux
 
 tddv::~tddv() = default;
 // {
-//     // Can't delete test widget here because the logger is already closed.
+//     // Can't delete test widgets here because the logger is already closed.
 // }
 
 
@@ -64,7 +64,7 @@ log::code tddv::setup_ui()
     _test_widget_->set_components(ui::components::Frame);
     _test_widget_->draw();
     auto p = _test_widget_->begin_draw();
-    p.home() << ui::cxy{2,2} << color::lightsteelblue3 <<  glyph::pi << "  widget::" << _test_widget_->id();
+    p.home() << ui::cxy{2,2} << color::lightsteelblue3 <<  glyph::pi << "  widgets::" << _test_widget_->id();
     _test_widget_->end_draw(p);
     _test_widget_->show();
     log::jnl() << app_name() << " ui..." << log::code::done << log::eol;

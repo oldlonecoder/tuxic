@@ -116,8 +116,8 @@ public:
 
 /*
     static constexpr u16 None      = 0;
-    static constexpr u16 Caption   = 0x0001; ///< Caption widget
-    static constexpr u16 Glyph     = 0x0002; ///< Glyph widget
+    static constexpr u16 Caption   = 0x0001; ///< Caption widgets
+    static constexpr u16 Glyph     = 0x0002; ///< Glyph widgets
     static constexpr u16 StatusBar = 0x0004; ///< Status bar
     static constexpr u16 HScrollBar= 0x0008; ///< horizontal scrollbar
     static constexpr u16 VScrollBar= 0x0010; ///< vertical scrollbar
@@ -140,6 +140,8 @@ public:
     log::code anchor_widget(widget* w);
 
     virtual log::code setup_ui();
+    virtual log::code add_component(ui::components::type _cmp);
+
     void set_components(ui::components::type c);
     void set_uistyle(ui::uistyle::Type s);
     void set_uiclass(ui::uiclass::Type cls);
@@ -155,10 +157,10 @@ protected:
     color::pair                          _colors_{};
     ui::colors::attr_db::components _states_colors_{}; ///< Widget States colors database.
     ui::colors::attr_db::elements   _elements_{};  ///< Widget colors elements database
-    ui::anchor::value               _anchor_       {ui::anchor::None};     ///< AutoFit values for widget placements within the parent 's widget.
-    ui::uistate::Type               _uistate_      {ui::uistate::Active};  ///< ...widget state...{ visible, active,focus, etc ... }
-    ui::uistyle::Type               _uistyle_      {ui::uistyle::None};    ///< Toplevel Window or child widget components
-    ui::uiclass::Type               _uiclass_      {ui::uiclass::None};    ///< css-like named class property of this widget ( ex. : Error,Warning,Fatal,Information, etc... )
+    ui::anchor::value               _anchor_       {ui::anchor::None};     ///< AutoFit values for widgets placements within the parent 's widgets.
+    ui::uistate::Type               _uistate_      {ui::uistate::Active};  ///< ...widgets state...{ visible, active,focus, etc ... }
+    ui::uistyle::Type               _uistyle_      {ui::uistyle::None};    ///< Toplevel Window or child widgets components
+    ui::uiclass::Type               _uiclass_      {ui::uiclass::None};    ///< css-like named class property of this widgets ( ex. : Error,Warning,Fatal,Information, etc... )
     ui::components::type            _uicomponents_ {ui::components::None}; ///< Sub/child-widgets components
 
 

@@ -73,7 +73,7 @@ log::code status_bar::draw()
  * @brief Add a child widge
  * @param wid Widget ID
  * @param av Anchor value
- * @return pointer to the newly created widget
+ * @return pointer to the newly created widgets
  */
 widget* status_bar::add_widget(const std::string& wid, ui::anchor::value av)
 {

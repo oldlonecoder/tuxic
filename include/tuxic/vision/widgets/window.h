@@ -15,7 +15,7 @@
 
 #pragma once
 #include <tuxvision/ui/widget/status_bar.h>
-//#include <tuxvision/ui/widget/menu_bar.h>
+//#include <tuxvision/ui/widgets/menu_bar.h>
 
 namespace tux::ui
 {
@@ -23,7 +23,7 @@ namespace tux::ui
 
 /*!
  * \brief Public window class.
- *      Toplevel widget
+ *      Toplevel widgets
  */
 class TUXIC_FRM window : public widget
 {

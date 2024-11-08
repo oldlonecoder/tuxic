@@ -71,13 +71,15 @@ namespace components
 {
 using type = u16;
 static constexpr u16 None      = 0;
-static constexpr u16 Caption   = 0x0001; ///< Caption widget
-static constexpr u16 Glyph     = 0x0002; ///< Glyph widget
+static constexpr u16 Caption   = 0x0001; ///< Caption widgets
+static constexpr u16 Glyph     = 0x0002; ///< Glyph widgets
 static constexpr u16 StatusBar = 0x0004; ///< Status bar
 static constexpr u16 HScrollBar= 0x0008; ///< horizontal scrollbar
 static constexpr u16 VScrollBar= 0x0010; ///< vertical scrollbar
 static constexpr u16 Frame     = 0x0020; ///< Widget has a frame surrounding it (within geometry)
 static constexpr u16 MenuBar   = 0x0040; ///< Widget has a MenuBar system
+static constexpr u16 PrefixGlyph   = 0x0080; ///< Widget has a Prefixed Glyph ( Icon )
+static constexpr u16 SuffixGlyph   = 0x0100; ///< Widget has a Suffix Glyph ( Icon )
 
 }
 
@@ -90,9 +92,9 @@ static constexpr u32 MultiLine   = 0x00000020; ///< Multiline input field
 static constexpr u32 HScrollable = 0x00000040; ///< horizontally scrollable
 static constexpr u32 VScrollable = 0x00000080; ///< vertically scrollable
 static constexpr u32 Window      = 0x00000100; ///< Toplevel Window
-static constexpr u32 Resizable   = 0x00000200; ///< Resizable widget
+static constexpr u32 Resizable   = 0x00000200; ///< Resizable widgets
 static constexpr u32 Maximizable = 0x00000400; ///< Maximizable ->
-static constexpr u32 Minimizable = 0x00000800; ///< and minimizable widget
+static constexpr u32 Minimizable = 0x00000800; ///< and minimizable widgets
 }
 /**
  * @brief Widget ui state enums or'ed flags

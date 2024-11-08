@@ -11,7 +11,7 @@
  ***************************************************************************/
 
 
-//#include <tuxvision/ui/widget/window.h>
+//#include <tuxvision/ui/widgets/window.h>
 #include <tuxvision/ui/widget/uiscreen.h>
 
 namespace tux::ui
@@ -24,7 +24,7 @@ namespace tux::ui
  * \param _parent
  * \param _id
  * \param _components additional window;s sub-components
- * @note Window class objects are systematically toplevel widget.
+ * @note Window class objects are systematically toplevel widgets.
  */
 window::window(object *_parent, const std::string &_id, ui::components::type _components): widget(_parent,_id)
 {
