@@ -27,16 +27,19 @@ namespace tux
 {
 
 
-tddv::~tddv()
-{
-    // Can't delete test widget here because the logger is already closed.
-}
+tddv::~tddv() = default;
+// {
+//     // Can't delete test widget here because the logger is already closed.
+// }
 
 
 tddv::tddv(std::string app_name, int argc, char** argv): ui::application(std::move(app_name), argc, argv){}
 
 
-
+/*!
+ * 
+ * @return 
+ */
 log::code tddv::tddv_setup()
 {
     //application::setup();
@@ -47,6 +50,10 @@ log::code tddv::tddv_setup()
 }
 
 
+/*!
+ * 
+ * @return 
+ */
 log::code tddv::setup_ui()
 {
 
@@ -54,9 +61,10 @@ log::code tddv::setup_ui()
     log::test() << _test_widget_->pretty_id() << "has been created..." << log::eol;
     _test_widget_->set_geometry({{2,5},ui::size{40,5}});
     _test_widget_->set_theme("C64");
+    _test_widget_->set_components(ui::components::Frame);
     _test_widget_->draw();
     auto p = _test_widget_->begin_draw();
-    p.home() << "widget::" << _test_widget_->id();
+    p.home() << ui::cxy{2,2} << color::lightsteelblue3 <<  glyph::pi << "  widget::" << _test_widget_->id();
     _test_widget_->end_draw(p);
     _test_widget_->show();
     log::jnl() << app_name() << " ui..." << log::code::done << log::eol;
@@ -64,7 +72,10 @@ log::code tddv::setup_ui()
 }
 
 
-
+/*!
+ * 
+ * @return 
+ */
 log::code tddv::run()
 {
     try

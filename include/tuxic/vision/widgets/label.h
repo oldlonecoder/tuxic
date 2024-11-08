@@ -16,7 +16,7 @@
 #pragma once
 
 
-#include <tuxvision/ui/widget.h>
+#include <tuxic/vision/widget.h>
 
 
 namespace tux::ui

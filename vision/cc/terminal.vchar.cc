@@ -209,7 +209,11 @@ log::code vchar::render_string(vchar::string::iterator start, vchar::string::ite
                     str += accent_fr::data[it->accent_id()];
                 else
                     if(it->d & UGlyph)
+                    {
                         str += glyph::data[it->icon_id()];
+                        auto s = --str.end();
+                        str += (char)0x08;
+                    }
             ++it;
         }
         else

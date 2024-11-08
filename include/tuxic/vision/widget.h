@@ -140,15 +140,15 @@ public:
     log::code anchor_widget(widget* w);
 
     virtual log::code setup_ui();
-
+    void set_components(ui::components::type c);
+    void set_uistyle(ui::uistyle::Type s);
+    void set_uiclass(ui::uiclass::Type cls);
 protected:
     ui::size _size_limits_{0,0, ui::cxy{1,1},ui::cxy{0xFFFF,0xFFFF}};
     rectangle _geometry_{}; ///< Dimensions, internal cursor position
     rectangle _dirty_area_{};
 
-    void set_components(ui::components::type c);
-    void set_uistyle(ui::uistyle::Type s);
-    void set_uiclass(ui::uiclass::Type cls);
+
 
     std::string _theme_id_{"Default"};
     // --------- UI style and State----------------
